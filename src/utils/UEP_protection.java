@@ -149,7 +149,7 @@ import java.util.Arrays;
 	   outSize		= 24 * bitRate;
 	   myViterbi		= new ViterbiHandler (outSize, false);
 	   int index = findIndex (bitRate, protLevel);
-	   if (index == -1) {
+	   if (index == -1) {   // should not happen
 	      System. out. println ("problem with bitrate " + bitRate + "and priotectionlevel " + protLevel + " call an expert");
 	   index = 1;
 	   }
@@ -206,7 +206,6 @@ import java.util.Arrays;
 	         }
 	      }
 	   }
-
 /**
   *     we have a final block of 24 bits  with puncturing according to PI_X
   *     This block constitutes the 6 * 4 bits of the register itself.
@@ -231,6 +230,6 @@ import java.util.Arrays;
 
 //     The actual deconvolution is done by the viterbi decoder
 	   myViterbi. deconvolve (viterbiBlock, outVec);
-           return true;
+           return true; // always true
 	}
 }
