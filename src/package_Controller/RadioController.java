@@ -34,16 +34,12 @@ public class RadioController implements modelSignals, viewSignals {
      * @param savedValues */
 	public RadioController (RadioModel	model,
 	                        RadioView	view,	
-	                        Properties	savedValues) {
+	                        Properties	savedValues,
+                                BandHandler     my_bandHandler) {
            m_model		= model;
            m_view		= view;
 	   this. savedValues	= savedValues;
-	   String band		= "Band III";
-	   try {
-	      band		= savedValues. getProperty ("dabBand", band);
-	   } catch (Exception e) {}
-
-	   my_bandHandler	= new BandHandler (band);
+	   this. my_bandHandler	= my_bandHandler;
 	   textMapper		= new Textmappers ();
 	   channelNumber	= 0;
 	   scanning		= true;
