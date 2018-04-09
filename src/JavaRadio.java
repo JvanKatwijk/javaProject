@@ -36,6 +36,9 @@ public class JavaRadio {
 	   try {
 	      test = Integer.parseInt (dabMode);
 	   } catch (Exception e) {}
+           
+           String dabBand   = savedValues. getProperty ("dabBand", "Band III");
+           BandHandler my_bandHandler   = new BandHandler (dabBand);
 
 	   final int mode = test;
       /* Create and display the form */
@@ -48,7 +51,8 @@ public class JavaRadio {
                  RadioController controller =
 	                                  new RadioController (model,
 	                                                       view,
-	                                                       savedValues);
+	                                                       savedValues,
+                                                               my_bandHandler);
 	         controller. startRadio ();
                  view.setVisible(true);
 	         view. setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
