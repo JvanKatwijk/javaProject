@@ -65,7 +65,7 @@ int16_t	i;
 	this	-> frequency	= frequency;
 	this	-> ppmCorrection	= ppmCorrection;
 	this	-> theGain	= gain;
-	this	-> autogain	= autogain;
+	this	-> autogainValue	= autogain;
 	this	-> deviceIndex	= deviceIndex;
 
 	inputRate		= 2048000;
@@ -108,7 +108,7 @@ int16_t	i;
 	fprintf (stderr, "\n");
 	if (ppmCorrection != 0)
 	   rtlsdr_set_freq_correction (device, ppmCorrection);
-	if (autogain)
+	if (autogainValue)
 	   rtlsdr_set_agc_mode (device, 1);
 	rtlsdr_set_tuner_gain (device, gains [int (theGain * gainsCount / 100)]);
 	_I_Buffer		= new RingBuffer<uint8_t>(1024 * 1024);
@@ -175,7 +175,8 @@ bool	rtlsdrHandler::has_autogain	(void) {
 	return true;
 }
 
-void	rtlsdrHandler::set_autogain	(bool b) {
+void	rtlsdrHandler::autogain	(bool b) {
+	autogainValue	= b;
 	rtlsdr_set_tuner_gain_mode (device, b);
 	rtlsdr_set_tuner_gain (device, theGain);
 }

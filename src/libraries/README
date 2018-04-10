@@ -1,0 +1,6 @@
+Creation of native libraries requires access to include files related
+to java and the jni.
+The include directories are to be found in the environment of the jvm.
+The scripts as given here relate to the location of the jvm on the
+Ubuntu 14.04 box (with oracle jdk-8 installed) and the rpi2/stretch.
+

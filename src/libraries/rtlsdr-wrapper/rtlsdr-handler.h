@@ -51,7 +51,7 @@ public:
 //
 	void		setGain		(int32_t);
 	bool		has_autogain	(void);
-	void		set_autogain	(bool);
+	void		autogain	(bool);
 //
 //	These need to be visible for the separate usb handling thread
 	RingBuffer<uint8_t>	*_I_Buffer;
@@ -61,7 +61,7 @@ private:
 	int32_t		inputRate;
 	int32_t		deviceCount;
 	uint16_t	deviceIndex;
-	bool		autogain;
+	bool		autogainValue;
 	int16_t		ppmCorrection;
 	HINSTANCE	Handle;
 	std::thread	workerHandle;

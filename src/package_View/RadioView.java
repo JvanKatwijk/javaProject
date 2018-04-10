@@ -164,6 +164,7 @@ public class RadioView extends JFrame {
 
 	   m_gainSlider.
 	      addChangeListener (new ChangeListener() {
+                 @Override
 	         public void
 	               stateChanged(javax. swing.event.ChangeEvent evt) {
 	            int gainValue = ((JSlider)evt. getSource ()). getValue ();
@@ -175,14 +176,11 @@ public class RadioView extends JFrame {
            });
 
 	   m_resetButton.
-	      addActionListener (new ActionListener () {
-	         @Override
-	         public void actionPerformed (ActionEvent evt) {
-	            listeners. forEach ((hl) -> {
-                       hl. reset ();
-                     });
-	         }
-	      });
+	      addActionListener ((ActionEvent evt) -> {
+                  listeners. forEach ((hl) -> {
+                      hl. reset ();
+                  });
+           });
 
 	   m_autogainButton.
 	      addActionListener ((ActionEvent evt) -> {

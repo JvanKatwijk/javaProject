@@ -135,11 +135,11 @@ JNIEXPORT void JNICALL Java_devices_rtlsdrDevice_rtlsdr_1setGain
 	h -> setGain (gain);
 }
 
-JNIEXPORT void JNICALL Java_devices_rtlsdrDevice_rtlsdr_1autoGain
+JNIEXPORT void JNICALL Java_devices_rtlsdrDevice_rtlsdr_1autogain
   (JNIEnv *env , jobject obj , jlong handle , jboolean gain) {
        if (handle == 0)
            return;
         rtlsdrHandler *h = reinterpret_cast <rtlsdrHandler *> (handle);
-	h -> set_autogain (gain);
+	h -> autogain (gain);
 }
 
