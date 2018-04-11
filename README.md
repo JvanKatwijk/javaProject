@@ -9,7 +9,7 @@
 Introduction
 ------------------------------------------------------------------------------
 
-![javaRadio with SDRPlay as device ](/javaDab.png?raw=true)
+![javaRadio with SDRPlay as device ](/javaRadio.png?raw=true)
 
 **javaRadio** is an implementation of the DAB software in java.
 The advantage of Java
@@ -88,7 +88,7 @@ Running DAB then is simply by "java JavaRadio".
 Features
 -----------------------------------------------------------------------------
 
-The - pretty simple - GUI doen not provide for a channel selector. In the
+The - pretty simple - GUI does not provide for a channel selector. In the
 first run of the program, the program will scan all channels in the selected
 band (default Band III). It will keep a list of channels where DAB signals
 were found, so the subsequent times the program is run it will ONLY scan
