@@ -284,6 +284,11 @@ public class RadioController implements modelSignals, viewSignals {
 	   m_view. show_motHandling (flag);
 	}
 
+	@Override
+	public	void	show_frameErrors	(int errors) {
+	   m_view. show_frameErrors (errors);
+	}
+
 	public	void	setService (int index) {
 	   String serviceName = services. get (index). serviceName;
 	   m_view.  showService   (serviceName);

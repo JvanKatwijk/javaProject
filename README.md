@@ -17,7 +17,7 @@ is its portability, its main disadvantage is that it runs on a VM and
 needs some "native" code libraries for e.g. device handling.
 The javaRadio software is modelled after, and derived from the C++ software 
 in Qt-DAB and dab-cmdline. While it is work in progress, the implementation
-does work.
+does work pretty well.
 
 ----------------------------------------------------------------------------
 Installation
@@ -43,9 +43,9 @@ wrappers around the existing libraries mainly.
 * b. a wrapper around the faad library;
 * c. a small library for handling MP2 frames;
 * d. a wrapper around the fftw3f library (although a simple FFT class 
-     written in java is part of the sources as well;
-* e. a wrapper around a "spiral-based" convolutional decoder. A simple
-     deconvolutional decoder written in Java is part of the sources as well.
+     written in java is part of the sources as well);
+* e. a wrapper around a "spiral-based" convolutional decoder. (A simple
+     deconvolutional decoder written in Java is part of the sources as well).
 * f. a wrapper around the portaudio library.
 
 
@@ -75,6 +75,8 @@ Javaradio.java.
 Compiling and running the program
 -------------------------------------------------------------------------
 
+The git repository is made from the Netbeans project directory. It contains
+the sources of the program in "src".
 If/when everything is in place, "cd" to the directory where the java sources
 are stored.
 

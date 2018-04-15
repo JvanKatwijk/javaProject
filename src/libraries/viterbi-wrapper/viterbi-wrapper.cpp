@@ -31,10 +31,10 @@
 
 JNIEXPORT void
 	JNICALL Java_utils_ViterbiHandler_deconvolve (JNIEnv *env,
-	                                                jobject obj,
-	                                                jlong	handler,
-	                                                jintArray v_in,
-	                                                jbyteArray v_out) {
+	                                              jobject obj,
+	                                              jlong	handler,
+	                                              jintArray v_in,
+	                                              jbyteArray v_out) {
 viterbi_768 *my_viterbiHandler =
 	                  reinterpret_cast <viterbi_768 *> (handler);
 jint	*in_vector	= env -> GetIntArrayElements (v_in, 0);

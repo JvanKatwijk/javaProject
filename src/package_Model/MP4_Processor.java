@@ -92,8 +92,8 @@ import	utils.*;
 	      if (blocksInBuffer < 5)
 	         return;
 
-	      if (++frameCount >= 25) {
-	         show_frameErrors (4 * (25 - frameErrors));
+	      if (++frameCount >= 100) {
+	         show_frameErrors (100 - frameErrors);
 	         frameCount = 0;
 	         frameErrors = 0;
 	      }
@@ -298,14 +298,14 @@ import	utils.*;
            
            private void show_frameErrors (int er) {
               final int errorsFound = er;
-//              try {
-//                 javax. swing. SwingUtilities. invokeLater (new Runnable () {
-//                    @Override
-//                    public void run () {
-//                            theGUI. show_frameErrors (errorsFound);}}
-//                 );
-//              } catch (Exception e){}
-           }
+	      try {
+	         javax. swing. SwingUtilities. invokeLater (new Runnable () {
+	            @Override
+	            public void run () {
+	               theGUI. show_frameErrors (errorsFound);}}
+	            );
+	      } catch (Exception e){}
+	   }
            
            private void  show_rsErrors (int er) {
               final int errorsFound = er;

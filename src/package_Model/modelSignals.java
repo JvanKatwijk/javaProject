@@ -13,5 +13,6 @@ public interface modelSignals {
 	public	void	show_picture	(byte [] data, int subtype, String name);
 	public	void	show_dynamicLabel	(String s);
 	public	void	show_motHandling	(boolean flag);
+	public	void	show_frameErrors	(int errors);
 }
 

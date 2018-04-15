@@ -128,21 +128,28 @@ public class RadioModel {
 	}
 
 	public	void	show_picture (byte [] data, int subtype, String name) {
-            listener.forEach((hl) -> {
+           listener.forEach((hl) -> {
                 hl. show_picture (data, subtype, name);
             });
 	}
 
 	public	void	show_dynamicLabel (String s) {
-            listener.forEach((hl) -> {
+           listener.forEach((hl) -> {
                 hl. show_dynamicLabel (s);
             });
 	}
 	 
 	public	void	show_motHandling (boolean flag) {
-            listener.forEach((hl) -> {
+           listener.forEach((hl) -> {
                 hl. show_motHandling (flag);
             });
 	}
+
+	public	void	show_frameErrors (int errors) {
+	   listener.forEach((hl) -> {
+                hl. show_frameErrors (errors);
+            });
+	}
+	
 }
 

@@ -64,7 +64,7 @@ public class RadioView extends JFrame {
 	   m_selectedService. setOpaque (true);
 	   m_gainSlider.   setPreferredSize(new Dimension(30, 60));
 	   m_serviceCount.  setToolTipText ("number of services detected");
-
+	   m_ficLevel_1.   setToolTipText ("green shows that the FIC information can be decoded");
     //... Layout the components.      
            JPanel row1 = new JPanel();
 	   row1. setLayout (new FlowLayout ());
@@ -336,7 +336,8 @@ public class RadioView extends JFrame {
         }
 
 
-	JFrame	notifier= new JFrame ();
+	JFrame	notifier	= new JFrame ();
+	JLabel	Label_6		= new JLabel ();
 	public	void	showProgramdata (String		serviceName,
 	                                 String		channel,
 	                                 int		startAddr,
@@ -373,6 +374,7 @@ public class RadioView extends JFrame {
 	   main. add (Label_3);
 	   main. add (Label_4);
 	   main. add (Label_5);
+	   main. add (Label_6);
 	   notifier. add (main);
 	   notifier. pack ();
 	   notifier. setVisible (true);
@@ -428,6 +430,11 @@ public class RadioView extends JFrame {
 	public  void show_motHandling (boolean flag) {
 	   m_motLabel. setOpaque (true);
 	   m_motLabel. setBackground (flag ? Color. green : Color. red);
+	}
+
+	public	void	show_frameErrors (int errors) {
+	   if (notifier. isVisible ())
+	      Label_6. setText ("signal quality " + errors);
 	}
 //
 //	Used to set the initial value
