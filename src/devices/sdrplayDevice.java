@@ -78,6 +78,7 @@ public class sdrplayDevice implements Device {
               System. load  ("/usr/local/lib/libsdrplay-wrapper.so");
 	      handle = sdrplayInit (frequency, gain, autogain);
            } catch (Exception e) {}
+	     catch (Error e) {}
            if (handle == 0)
               throw (new Exception ());
         }
