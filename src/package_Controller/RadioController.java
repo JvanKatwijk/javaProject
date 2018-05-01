@@ -89,6 +89,7 @@ public class RadioController implements modelSignals, viewSignals {
 	         break;
 	      channelNumber ++;
 	   }
+
 	   timerTask	= new TimerTask () {
 	      @Override
 	      public void run () {

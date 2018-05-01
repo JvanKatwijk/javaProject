@@ -71,8 +71,10 @@ public class airspyDevice implements Device {
 	   try {
               System. load  ("/usr/local/lib/libairspy-wrapper.so");
 	      handle = airspyInit (frequency, gain, autogain);
-           } catch (Exception e) {}
-	     catch (Error e) {}
+           } catch (Exception | Error e) {
+	      System. out. println ("loading airpsy-wrapper failed");
+	      System. out. println (e. getMessage ());
+	   }
            if (handle == 0)
               throw (new Exception ());
 	}

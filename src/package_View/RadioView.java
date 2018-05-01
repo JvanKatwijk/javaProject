@@ -409,7 +409,7 @@ public class RadioView extends JFrame {
 	      pictureFrame.setSize (300, 400);
 	      pictureFrame.setVisible (true);
 	   } catch (Exception e) {
-	      System. out. println ("foutje");
+	      System. out. println (e. getMessage ());
 	   }
 //	got an image file
 	   System. out. println ("showing " + name);

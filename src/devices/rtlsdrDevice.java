@@ -74,8 +74,10 @@ public class rtlsdrDevice implements Device {
 	      handle = 0;
 	      System. load  ("/usr/local/lib/librtlsdr-wrapper.so");
 	      handle = rtlsdrInit (frequency, gain, autogain);
-	   } catch (Exception e) {}
-	     catch (Error e) {}
+	   } catch (Error | Exception e) {
+	      System. out. println ("loading rtlsdr wrapper failed");
+	      System. out. println (e. getMessage ());
+	   }
 	   if (handle == 0)
 	      throw (new Exception ());
 	}

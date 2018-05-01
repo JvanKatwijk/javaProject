@@ -1,14 +1,14 @@
 
-import javax.swing.*;
+import	javax.swing.*;
 import	devices.*;
 import	package_View.*;
 import	package_Model.*;
 import	package_Controller.*;
 import	java.util.Properties;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import	java.io.File;
+import	java.io.FileInputStream;
+import	java.io.FileOutputStream;
+import	java.io.IOException;
 
 public class JavaRadio {
 //	... Create model, view, and controller.  They are

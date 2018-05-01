@@ -78,7 +78,10 @@ public class wavFiles implements Device {
 	   try {
 	      System. load  ("/usr/local/lib/libwav-wrapper.so");
 	      handle = fileOpen (fileName);
-           } catch (Exception e) {}
+           } catch (Exception | Error e) {
+	      System. out. println ("loading wav wrapper failed");
+	      System. out. println (e. getMessage ());
+	   }
 
 	}
 	private native	int	wav_getSamples		(long handle,

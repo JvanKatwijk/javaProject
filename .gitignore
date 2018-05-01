@@ -1,2 +1,5 @@
 /build/
 /dist/
+src/*.class
+src/*/*.class
+

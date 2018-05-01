@@ -2,7 +2,6 @@
 #include "airspy-handler.h"
 #include "devices_airspyDevice.h"
 
-
 /*
  * Class:     devices_airspyDevice
  * Method:    airspyInit
@@ -133,4 +132,5 @@ JNIEXPORT void JNICALL Java_devices_airspyDevice_airspy_1setGain
         airspyHandler *h = reinterpret_cast <airspyHandler *> (handle);
 	h -> setGain (gain);
 }
+
 
