@@ -27,11 +27,11 @@ public	class ViterbiHandler {
 	
 	   try {
 	      System. load  ("/usr/local/lib/libviterbi-wrapper.so");
-	      System. out. println ("Kaal loading werkte");
 	      handler	= initViterbi (size, flag);
 	   } catch (Exception e) {
-//	      System. out. println (e. getMessage ());
-	      System. out. println ("Viterbi decoder could not be loaded");
+	      System. out. println ("Loading viterbi-wrapper failed");
+	      System. out. println (e. getMessage ());
+	      System. exit (1);
 	   }
 	}
 

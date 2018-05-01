@@ -34,8 +34,10 @@ public class PCMwrapper {
 	   try {
 	      System. load  ("/usr/local/lib/lib-pcmwrapper.so");
 	      handle = pcmwrapperInit ();
-	   } catch (Exception e) {
+	   } catch (Error | Exception e) {
               System. out. println ("loading pcmwrapper failed");
+	      System. out. println (e. getMessage ());
+	      System. exit (1);
            }
 	}
 

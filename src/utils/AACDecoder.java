@@ -41,8 +41,9 @@ public class AACDecoder {
 	   try {
 	      System. load  ("/usr/local/lib/libfaad-wrapper.so");
 	      System. out. println ("faad loaded");
-	   } catch (Exception e) {
+	   } catch (Error | Exception e) {
 	      System. out. println (e. getMessage ());
+	      System. exit (1);
 	   }
 	   aacReset ();
 	   f_32000_r	= new LFfilter (5, 24000, 96000);

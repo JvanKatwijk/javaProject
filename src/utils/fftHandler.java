@@ -36,7 +36,11 @@ public class	fftHandler {
 	   DabParams my_dabParams	= new DabParams (mode);
            try {
               System. load  ("/usr/local/lib/libfft-wrapper.so");
-           } catch (Exception e) {}
+           } catch (Error | Exception e) {
+	      System. out. println ("loading fft-wrapper failed");
+	      System. out. println (e. getMessage ());
+	      System. exit (1);
+	   }
            handle	= fftWrapper (my_dabParams. get_T_u ());
         }
 }
