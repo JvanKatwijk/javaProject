@@ -58,20 +58,7 @@ installed jdk.
 
 Installation of the wrappers is in "/usr/local/lib".
 
------------------------------------------------------------------------
-
-Handling devices
 ------------------------------------------------------------------------
-
-The main program will check the availability of the various devices.
-Three devices are supported, one might want to exclude devices that
-are not available from these checks. This is done by commenting out
-the try {....}catch sections in the function "bindDevices" in the file
-Javaradio.java.
-
--------------------------------------------------------------------------
-------------------------------------------------------------------------
-
 Compiling and running the program
 -------------------------------------------------------------------------
 
