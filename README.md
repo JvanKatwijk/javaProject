@@ -1,9 +1,5 @@
 **javaRadio**
 
------------------------------------------------------------------------------
-
- W O R K  I N  P R O G R E S S
------------------------------------------------------------------------------
 
 ------------------------------------------------------------------------------
 Introduction
@@ -16,8 +12,9 @@ The advantage of Java
 is its portability, its main disadvantage is that it runs on a VM and
 needs some "native" code libraries for e.g. device handling.
 The javaRadio software is modelled after, and derived from the C++ software 
-in Qt-DAB and dab-cmdline. While it is work in progress, the implementation
-does work pretty well.
+in Qt-DAB and dab-cmdline. While the implementation works pretty well, it was
+a programming exercise and it is not actively maintained.
+Nevertheless, comments are welcome.
 
 ----------------------------------------------------------------------------
 Installation
