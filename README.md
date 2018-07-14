@@ -112,13 +112,11 @@ be set to the L-Band, and setting "dabMode=2" will set the software to
 recognize Mode 2.
 
 -----------------------------------------------------------------------------
-Todo
+Future plans
 -------------------------------------------------------------------------------
 
-* a. Finishing the MP2 decoding: it gives sound and the padhandling is OK, but at switching
-between MP2 services, there are some issues with the sound;
-* b. Use of a java encoded MP2 and Faad library;
-* c. Looking into the efficiency of the FFT handling and convolutional decoder.
+* a. Use of a java encoded MP2 and Faad library;
+* b. Looking into the efficiency of the FFT handling and convolutional decoder and using java encoded libraries
 * d. Running the implementation on an RPI 2.
 
 and of course, the GUI needs quite some work.
@@ -132,8 +130,8 @@ Copyright
         Jan van Katwijk (J.vanKatwijk@gmail.com)
         Lazy Chair Computing
 
-        The javaDab software is made available under the GPL-2.0.
-        The SDR-J software, of which the javaDab software is a part,
+        The javaProject software is made available under the GPL-2.0.
+        The SDR-J software, of which the javaProject software is a part,
         is distributed in the hope that it will be useful,
         but WITHOUT ANY WARRANTY; without even the implied warranty of
         MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
