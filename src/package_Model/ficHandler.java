@@ -149,6 +149,7 @@ public	class	ficHandler extends fibHandler {
 	         show_ficSuccess (false);
 	         continue;
 	      }
+//	      System. out. println ("x");
 	      show_ficSuccess (true);
 	      process_FIB (fibBlock, ficno);
            }

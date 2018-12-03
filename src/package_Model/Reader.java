@@ -99,13 +99,13 @@ public class Reader {
 	   sampleCount += n;
 	   if (sampleCount > 2048000 / 4) {
 //	      System. out. println (sampleCount);
-	      final int offset = (int)freqOffset;
-	      try {
-	         javax. swing. SwingUtilities. invokeLater (new Runnable () {
-	            @Override
-	            public void run () {theGUI. setFreqOffset (offset);}});
-	      }
-	      catch (Exception e) {}
+//	      final int offset = (int)freqOffset;
+//	      try {
+//	         javax. swing. SwingUtilities. invokeLater (new Runnable () {
+//	            @Override
+//	            public void run () {theGUI. setFreqOffset (offset);}});
+//	      }
+//	      catch (Exception e) {}
 	      sampleCount = 0;
 	   }
 

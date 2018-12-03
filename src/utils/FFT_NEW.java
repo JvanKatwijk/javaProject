@@ -49,91 +49,92 @@
 package utils;
 
 public class FFT_NEW {
-	  private final int n, m;
+	private final int n, m;
 //	Lookup tables.  Only need to recompute when size of FFT changes.
-	  private final float [] cos;
-	  private final float [] sin;
+	private final float [] cos;
+	private final float [] sin;
 
-	  public FFT_NEW (int n) {
+	public FFT_NEW (int n) {
 
-	    this. n = n;
-	    this. m = (int)(Math.log(n) / Math.log(2));
+	   this. n = n;
+	   this. m = (int)(Math.log(n) / Math.log(2));
 	
-	    // Make sure n is a power of 2
-	    if (n != (1 << m))
-	      throw new RuntimeException("FFT length must be power of 2");
+	   // Make sure n is a power of 2
+	   if (n != (1 << m))
+	      throw new RuntimeException ("FFT length must be power of 2");
 	
-	    // precompute tables
-	    cos = new float [n / 2];
-	    sin = new float [n / 2];
+//	precompute tables
+	   cos = new float [n / 2];
+	   sin = new float [n / 2];
 	
-	    for (int i = 0; i < n / 2; i++) {
+	   for (int i = 0; i < n / 2; i++) {
 	      cos [i] = (float)(Math. cos (-2 * Math. PI * i / n));
 	      sin [i] = (float)(Math. sin (-2 * Math. PI * i / n));
-	    }
-	  }
+	   }
+	}
 	
-	   public void fft (float [] x) {
-	      int i,j,k,n1,n2,a;
-	      float c,s,e,t1,t2;
+
+	public void fft (float [] x) {
+	   int i,j,k,n1,n2,a;
+	   float c,s,e,t1,t2;
 	  
 //	Bit-reverse
-	      j = 0;
-	      n2 = n / 2;
-	      for (i = 1; i < n - 1; i++) {
-	         n1 = n2;
-	         while (j >= n1 ) {
-	            j = j - n1;
-	            n1 = n1/2;
-	         }
-	         j = j + n1;
-	    
-	         if (i < j) {
-	            t1		= x[2 * i];
-	            x [2 * i]	= x[2 * j];
-	            x [2 * j]	= t1;
-
-	            t1		= x[2 * i + 1];
-	            x [2 * i + 1]	= x[2 * j + 1];
-	            x [2 * j + 1]	= t1;
-	         }
+	   j = 0;
+	   n2 = n / 2;
+	   for (i = 1; i < n - 1; i++) {
+	      n1 = n2;
+	      while (j >= n1 ) {
+	         j = j - n1;
+	         n1 = n1/2;
 	      }
-	    // FFT
-	      n1 = 0;
-	      n2 = 1;
-	  
-	      for (i = 0; i < m; i++) {
-	         n1 = n2;
-	         n2 = n2 + n2;
-	         a = 0;
-	    
-	         for (j = 0; j < n1; j++) {
-	            c = cos [a];
-	            s = sin [a];
-	            a +=  1 << (m-i-1);
-	
-	            for (k = j; k < n; k = k + n2) {
-	               int k2_x	= 2 * k;
-	               int k2_y	= 2 * k + 1;
-	               int kn1_x = 2 * (k + n1);
-	               int kn1_y = 2 * (k + n1) + 1;
 
-	               t1 = c * x[kn1_x] - s * x[kn1_y];
-	               t2 = s * x[kn1_x] + c * x[kn1_y];
-	               x [kn1_x]		= x [k2_x] - t1;
-	               x [kn1_y]		= x [k2_y] - t2;
-	               x [k2_x]			= x [k2_x] + t1;
-	               x [k2_y]			= x [k2_y] + t2;
+	      j = j + n1;
+	      if (i < j) {
+                 t1		= x [2 * i];
+	         x [2 * i]	= x [2 * j];
+	         x [2 * j]	= t1;
+	         t1		= x [2 * i + 1];
+	         x [2 * i + 1]	= x [2 * j + 1];
+	         x [2 * j + 1]	= t1;
+	      }
+	   }
+
+// FFT
+	   n1 = 0;
+	   n2 = 1;
+	  
+	   for (i = 0; i < m; i++) {
+	      n1 = n2;
+	      n2 = n2 + n2;
+	      a = 0;
+	    
+	      for (j = 0; j < n1; j++) {
+	         c = cos [a];
+	         s = sin [a];
+	         a +=  1 << (m-i-1);
+	
+	         for (k = j; k < n; k = k + n2) {
+	            int k2_x  = 2 * k;
+	            int k2_y  = 2 * k + 1;
+	            int kn1_x = 2 * (k + n1);
+	            int kn1_y = 2 * (k + n1) + 1;
+
+	            t1 = c * x[kn1_x] - s * x[kn1_y];
+                    t2 = s * x[kn1_x] + c * x[kn1_y];
+	            x [kn1_x] = x [k2_x] - t1;
+	            x [kn1_y] = x [k2_y] - t2;
+	            x [k2_x]  = x [k2_x] + t1;
+	            x [k2_y]  = x [k2_y] + t2;
 //	               t1 = c * x[2 * (k + n1)] - s * x[2 * (k + n1) + 1];
 //	               t2 = s * x[2 * (k + n1)] + c * x[2 * (k + n1) + 1];
 //	               x [2 * (k + n1)]      = x [2 * k] - t1;
 //	               x [2 * (k + n1) + 1]  = x [2 * k + 1] - t2;
 //	               x [2 * k]             = x [2 * k] + t1;
 //	               x [2 * k + 1]         = x [2 * k + 1] + t2;
-	            }
 	         }
 	      }
 	   }
+	}
 //
 //	we use IFFT only in the phasereference module, we do not
 //	need the scaling there, so we keep it simple

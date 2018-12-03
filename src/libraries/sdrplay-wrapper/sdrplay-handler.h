@@ -39,6 +39,7 @@ typedef void (*mir_sdr_StreamCallback_t)(int16_t	*xi,
 	                                 int32_t	fsChanged,
 	                                 uint32_t	numSamples,
 	                                 uint32_t	reset,
+	                                 uint32_t	hwRemoved,
 	                                 void		*cbContext);
 typedef	void	(*mir_sdr_GainChangeCallback_t)(uint32_t	gRdB,
 	                                        uint32_t	lnaGRdB,
@@ -66,11 +67,10 @@ public:
 	bool	has_autogain		(void);
 	void	set_autogain		(bool);
 	RingBuffer<std::complex<float>>	*_I_Buffer;
-	int16_t		nrBits;
-private:
-
-	int16_t		hwVersion;
 	float		denominator;
+private:
+	int16_t		nrBits;
+	int16_t		hwVersion;
 	uint16_t	deviceIndex;
 	uint32_t	numofDevs;	// int32_t not my choice
 	int32_t		inputRate;

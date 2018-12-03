@@ -33,6 +33,7 @@ public class RadioView extends JFrame {
 	private final	JLabel m_ficLevel_5	= new JLabel ("  ");
 
 	private final	JLabel m_ensembleLabel	= new JLabel ("ensemble");
+	private final	JLabel m_snrLabel	= new JLabel ("    ");
 	private final	JLabel m_selectedService= new JLabel ("wait for services");
 	private final	JLabel m_channelLabel	= new JLabel ("          ");
 	private	final	JLabel m_serviceCount	= new JLabel ("  ");
@@ -104,6 +105,8 @@ public class RadioView extends JFrame {
 	   JPanel row3	= new JPanel ();
 	   row3. setLayout (new FlowLayout ());
 	   row3. add (m_ensembleLabel);
+	   row3. add (Box. createRigidArea (new Dimension (5, 0)));
+	   row3. add (m_snrLabel);
 
 	   JPanel row4	= new JPanel ();
 	   row4. setLayout (new FlowLayout ());
@@ -221,6 +224,10 @@ public class RadioView extends JFrame {
 	   set_qualityLabel (m_timesync, b ? 1 : 0);
 	}
 
+	public	void	show_SNR (int snr) {
+	   m_snrLabel. setText ("SNR = " + snr);
+	}
+
 	public	String	get_serviceName (int row, int column) {
 	   return m_serviceTable. get_serviceName (row, column);
 	}
@@ -328,13 +335,11 @@ public class RadioView extends JFrame {
 	   m_resetButton. setOpaque (true);
 	}
 
-
 	public	void	showServiceCount	(int numofServices) {
 	   m_serviceCount.    setBackground (Color. green);
            m_serviceCount.    setOpaque (true);
            m_serviceCount.    setText (Integer. toString (numofServices));
         }
-
 
 	JFrame	notifier	= new JFrame ();
 	JLabel	Label_6		= new JLabel ();

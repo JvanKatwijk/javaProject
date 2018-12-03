@@ -3,11 +3,20 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/jan/NetBeansProjects/JavaProject/src/package_Controller/RadioController.java</file>
+            <file>file:/home/jan/NetBeansProjects/JavaProject/src/package_Model/AudioProcessor.java</file>
+            <file>file:/home/jan/NetBeansProjects/JavaProject/src/package_Model/RadioModel.java</file>
             <file>file:/home/jan/NetBeansProjects/JavaProject/src/package_Controller/BandHandler.java</file>
-            <file>file:/home/jan/NetBeansProjects/JavaProject/src/package_View/RadioView.java</file>
+            <file>file:/home/jan/NetBeansProjects/JavaProject/src/package_Model/DabProcessor.java</file>
+            <file>file:/home/jan/NetBeansProjects/JavaProject/src/package_Model/modelSignals.java</file>
+            <file>file:/home/jan/NetBeansProjects/JavaProject/src/devices/Device.java</file>
             <file>file:/home/jan/NetBeansProjects/JavaProject/src/JavaRadio.java</file>
             <file>file:/home/jan/NetBeansProjects/JavaProject/src/utils/UEP_protection.java</file>
+            <file>file:/home/jan/NetBeansProjects/JavaProject/src/package_Model/Galois.java</file>
+            <file>file:/home/jan/NetBeansProjects/JavaProject/src/utils/ViterbiHandler.java</file>
+            <file>file:/home/jan/NetBeansProjects/JavaProject/src/package_Controller/RadioController.java</file>
+            <file>file:/home/jan/NetBeansProjects/JavaProject/src/package_Model/OfdmDecoder.java</file>
+            <file>file:/home/jan/NetBeansProjects/JavaProject/src/package_View/RadioView.java</file>
+            <file>file:/home/jan/NetBeansProjects/JavaProject/src/package_Model/Reader.java</file>
         </group>
     </open-files>
 </project-private>

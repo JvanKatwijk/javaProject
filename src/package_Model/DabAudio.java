@@ -164,6 +164,7 @@ public class	DabAudio extends DabVirtual {
 //      only continue when de-interleaver is filled
            if (countforInterleaver <= 15) {
               countforInterleaver ++;
+              return;
            }
 //
 	   protectionHandler. deconvolve (tempX, fragmentSize, outV);

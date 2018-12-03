@@ -247,6 +247,7 @@ int	subChannelId	= getBits (p, d, bitOffset, 6);
 int	startAddr	= getBits (p, d, bitOffset + 6, 10);
 int	tableIndex;
 
+//	System. out. println ("fig0-1 detected");
 	subChannels [subChannelId]. inUse = true;
 	subChannels [subChannelId]. startAddr	= startAddr;
 	if (getBits (p, d, bitOffset + 16, 1) == 0) {	// short form

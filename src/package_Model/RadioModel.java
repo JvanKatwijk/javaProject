@@ -81,6 +81,12 @@ public class RadioModel {
 	      hl. no_signal_found ();
 	   });
 	}
+        
+        public  void    show_SNR (int snr) {
+            listener. forEach ((hl) -> {
+               hl. show_SNR (snr);
+            });
+        }
 
 	public	void	setService (String s) {
 	   ProgramData p = new ProgramData ();

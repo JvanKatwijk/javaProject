@@ -30,12 +30,8 @@ public class DabProcessor extends Thread {
 	final   private Reader		my_Reader;
 	final   private	Device		my_Device;
         final   private	OfdmDecoder	my_ofdmDecoder;
-	final   private int		t_null;
 	final   private	int		t_s;
 	final   private	int		t_u;
-        final   private int             t_g;
-	final   private	int		t_F;
-	final   private	int		nrBlocks;
 	final   private	int		carriers;
 	final   private	int		carrierDiff;
         	private boolean         correctionNeeded = true;
@@ -66,18 +62,18 @@ public class DabProcessor extends Thread {
 	                                           my_ficHandler,
 	                                           my_dabBackend,
                                                    theScreen);
-	   t_null               = my_params. get_T_null ();
 	   t_s			= my_params. get_T_s ();
 	   t_u			= my_params. get_T_u ();
-           t_g                  = my_params. get_T_g ();
-	   t_F			= my_params. get_T_F ();
-	   nrBlocks		= my_params. get_L ();
 	   carriers		= my_params. get_carriers ();
 	   carrierDiff		= my_params. get_carrierDiff ();
 	}
 
         @Override
 	public void run	() {
+	final	int	nrBlocks	= my_params. get_L ();
+	final	int	t_F		= my_params. get_T_F ();
+        final	int	t_g		= my_params. get_T_g ();
+	final	int	t_null		= my_params. get_T_null ();
 	final	float []	ofdmBuffer	= new float [2 * t_u];
 	final	float []	Tnull_Buffer	= new float [2 * t_null];
 	final	float []	tg_Buffer	= new float [2 * t_g];
@@ -121,7 +117,7 @@ public class DabProcessor extends Thread {
 //	over the last 50 samples) and sLevel, the long term average.
 //	Here we start looking for the null level, i.e. a dip
 	            counter        = 0;
-	            while (cLevel / 100.0  > 0.40 * my_Reader. get_sLevel ()) {
+	            while (cLevel / 100.0  > 0.5 * my_Reader. get_sLevel ()) {
 	               my_Reader. getSamples (s_Sample, 
 	                                     fineCorrector + coarseCorrector);
 	              
@@ -158,7 +154,7 @@ public class DabProcessor extends Thread {
 //      We now start looking for the end of the null period.
 
 	            counter        = 0;
-	            while (cLevel / 100.0 < 0.80 * my_Reader. get_sLevel ()) {
+	            while (cLevel / 100.0 < 0.75 * my_Reader. get_sLevel ()) {
 	               my_Reader. getSamples (s_Sample,
 	                                      coarseCorrector + fineCorrector);
 	       
@@ -245,27 +241,6 @@ public class DabProcessor extends Thread {
 	         float freqCorr_re  = 0.0f;
 	         float freqCorr_im  = 0.0f;
 	         for (int ofdmSymbolCount = 1;
-	            ofdmSymbolCount < 4; ofdmSymbolCount ++) {
-	            my_Reader. getSamples (tg_Buffer,
-	                                   coarseCorrector + fineCorrector);
-	            my_Reader. getSamples (ofdmBuffer,
-	                                   coarseCorrector + fineCorrector);
-	  
-	            for (int i = 0; i < t_g; i ++) {
-	              float re_ofdm = ofdmBuffer [2 * (t_u - t_g + i)];
-	              float im_ofdm = ofdmBuffer [2 * (t_u - t_g + i) + 1];
-	              float re_tg   =   tg_Buffer [2 * i];
-	              float im_tg   = - tg_Buffer [2 * i + 1];
-	              freqCorr_re  += re_ofdm * re_tg - im_ofdm * im_tg;
-	              freqCorr_im  += re_ofdm * im_tg + im_ofdm * re_tg;
-	            }
-
-//	            my_ofdmDecoder. decodeFICblock (ofdmBuffer,
-//	                                            ofdmSymbolCount);
-	            my_ofdmDecoder. processBlock (ofdmBuffer, ofdmSymbolCount);
-	         }
-//	and similar for the (params -> L - 4) MSC blocks
-	         for (int ofdmSymbolCount = 4;
 	              ofdmSymbolCount <  nrBlocks; ofdmSymbolCount ++) {
 	            my_Reader. getSamples (tg_Buffer,
 	                                   coarseCorrector + fineCorrector);
@@ -281,8 +256,6 @@ public class DabProcessor extends Thread {
 	              freqCorr_im  += re_ofdm * im_tg + im_ofdm * re_tg;
 	            }
 
-//	            my_ofdmDecoder. decodeMscblock (ofdmBuffer,
-//	                                                ofdmSymbolCount);
 	            my_ofdmDecoder. processBlock (ofdmBuffer,
 	                                                ofdmSymbolCount);
 	         }

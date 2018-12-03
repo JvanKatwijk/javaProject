@@ -30,7 +30,8 @@ import	utils.*;
 
 	public class OfdmDecoder extends Thread {
 	   private final	DabParams	my_dabParams;
-	   private final	fftHandler	my_FFT;
+	   private final	FFT_NEW		my_FFT;
+//	   private final	fftHandler	my_FFT;
 	   private final	ficHandler	my_ficHandler;
 	   private final	DabBackend	my_dabBackend;
 	   private final	FreqInterleaver	my_Mapper;
@@ -59,7 +60,8 @@ import	utils.*;
 	                                 DabBackend	mb,
 	                                 RadioModel	theGUI) {
 	      this. my_dabParams	= my_dabParams;
-	      my_FFT		= new fftHandler (my_dabParams. get_dabMode ());
+	      my_FFT		= new FFT_NEW (my_dabParams. get_T_u ());
+//	      my_FFT		= new fftHandler (my_dabParams. get_dabMode ());
 	      my_ficHandler	= fc;
 	      my_dabBackend	= mb;
 	      this. theGUI	= theGUI;
@@ -104,18 +106,18 @@ import	utils.*;
 	               if (!running)
                        return;
 	            }
-	            System. arraycopy (theData [nextOut], 0,
-	                                   hulpVector, 0, 2 * t_u);
-	            freeSlots. release ();
+//	            System. arraycopy (theData [nextOut], 0,
+//	                                   hulpVector, 0, 2 * t_u);
 	            if (nextOut == 0)
-	               processBlock_0 (hulpVector);
+	               processBlock_0 (theData [nextOut]);
 	            else
 	            if (nextOut < 4) {
-	               decodeFICblock (hulpVector, nextOut);
+	               decodeFICblock (theData [nextOut], nextOut);
                     }
                     else {
-	               decodeMscblock (hulpVector, nextOut);
+	               decodeMscblock (theData [nextOut], nextOut);
                     }
+	            freeSlots. release ();
 	            nextOut = (nextOut + 1) % nrBlocks;
 	            
                  }
@@ -138,18 +140,19 @@ import	utils.*;
 	   public	void	processBlock_0 (float [] buffer) {
 //	we could add an assert here that buffer, length = 2 * t_u
 	      System. arraycopy (buffer, 0, phaseReference, 0, buffer. length);
-	      my_FFT. do_FFT (phaseReference, 1);
+	      my_FFT. fft (phaseReference);
+//	      my_FFT. do_FFT (phaseReference, 1);
 	      current_snr	= 0.6f * current_snr +
 	                                    0.4f * get_snr (phaseReference);
 	      if (++frameCount_2 > 10) {
 	         final int the_snr = (int)current_snr;
 	         frameCount_2 = 0;
-//	         try {
-//	               javax. swing. SwingUtilities. invokeLater (new Runnable () {
-//	                  @Override
-//	                  public void run () {theGUI. show_SNR (the_snr);}});
-//	            }
-//	            catch (Exception e) {}
+	         try {
+	               javax. swing. SwingUtilities. invokeLater (new Runnable () {
+	                  @Override
+	                  public void run () {theGUI. show_SNR (the_snr);}});
+	            }
+	            catch (Exception e) {}
 	         }
 	      }
 //
@@ -162,7 +165,8 @@ import	utils.*;
      * @param blkno
   */
 	   public void	decodeFICblock (float [] fft_buffer, int blkno) {
-	      my_FFT.  do_FFT (fft_buffer, 1);
+	      my_FFT.  fft (fft_buffer);
+//	      my_FFT.  do_FFT (fft_buffer, 1);
 
 	      if (++frameCount_1 > 12) {
 	         frameCount_1 = 0;
@@ -226,7 +230,8 @@ import	utils.*;
      * @param blkno
   */
 	   public void	decodeMscblock (float [] fft_buffer, int blkno) {
-	      my_FFT.  do_FFT (fft_buffer, 1);
+	      my_FFT.  fft (fft_buffer);
+//	      my_FFT.  do_FFT (fft_buffer, 1);
 
 //	a little optimization: we do not interchange the
 //	positive/negative frequencies to their right positions.

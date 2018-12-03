@@ -188,18 +188,57 @@ public	class ViterbiHandler {
 //	for optimization purposes, we ask the user to provide the
 //	right index for the various tables (i.e. "state"  or, if the
 //	entrybit = 1 "state + NumofStates"
-//	sym [0] -> 256 is a 0
+//	sym [0] ->  256 is a 0
 //	sym [0] -> -256 is a 1
 	private int costsFor (int lIndex,
 	                      short sym_0, short sym_1,
 	                      short sym_2, short sym_3) {
 	   int	res	= 0;
-
+//
+//	p1, p2, p3 and p4 are the bits that "do" the transition
+//	from the predecessor to the current state.
 	   byte p1 = poly1_table [lIndex];
 	   byte p2 = poly2_table [lIndex];
 	   byte p3 = poly3_table [lIndex];
 	   byte p4 = poly4_table [lIndex];
 
+	   switch ((p1 << 3) |(p2 << 2) | (p3 << 1) | (p4)) {
+	      case 0;
+                 return 1024 - sym_0 - sym_1 - sym_2 - sym_3;
+	      case 1:		// p4 = 1;
+	         return 1024 - sym_0 - sym_1 - sym_2 + sym_3;
+	      case 2:		// p3 = 1
+	         return 1024 - sym_0 - sym_1 + sym_2 - sym_3;
+	      case 3:		// p3 = p4 = 1
+	         return 1024 - sym_0 - sym_1 + sym_2 + sym_3;
+	      case 4:		// p2 = 1
+	         return 1024 - sym_0 + sym_1 - sym_2 - sym_3;
+	      case 5:		// p2 = p4 = 1
+	         return 1024 - sym_0 + sym_1 - sym_2 + sym_3;
+	      case 6:		// p2 = p3 = 1
+	         return 1024 - sym_0 + sym_1 + sym_2 - sym_3;
+	      case 7:		// p2 = p3 = p4 = 1
+	         return 1024 - sym_0 + sym_1 + sym_2 + sym_3;
+	      case 8:		// p1 = 1
+	         return 1024 + sym_0 - sym_1 - sym_2 - sym_3;
+	      case 9:		// p1 = p4 = 1
+	         return 1024 + sym_0 - sym_1 - sym_2 + sym_3;
+	      case 10:		// p1 = p3 = 1;
+	         return 1024 + sym_0 - sym_1 + sym_2 - sym_3;
+	      case 11:		// p1 = p3 = p4 = 1;
+	         return 1024 + sym_0 - sym_1 + sym_2 + sym_3;
+	      case 12:		// p1 = p2 = 1
+	         return 1024 + sym_1 + sym_2 - sym_2 - sym_3;
+	      case 13:		// p1 = p2 = p4 = 1;
+	         return 1024 + sym_0 + sym_1 - sym_2 + sym_3;
+	      case 14:		// p1 = p2 = p3 = 1
+	         return 1024 + sym_0 + sym_1 + sym_2 - sym_3;
+	      case 15:
+	         return 1024 + sym_0 + sym_1 + sym_2 + sym_3;
+	      default:
+	         return 2 * 2048;
+	   }
+	
 	   if ((int)(p1 + p2) == 0)
 	      res += 256 - sym_0 + 256 - sym_1;
 	   else

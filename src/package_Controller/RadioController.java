@@ -255,6 +255,10 @@ public class RadioController implements modelSignals, viewSignals {
 	   m_view. set_Synced (flag);
 	}
 
+	public	void	show_SNR (int snr) {
+	   m_view. show_SNR (snr);
+	}
+
 	@Override
 	public	void	show_isStereo	(boolean b) {
 	   m_view. show_isStereo (b);
