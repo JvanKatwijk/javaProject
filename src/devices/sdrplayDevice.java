@@ -25,28 +25,17 @@ public class sdrplayDevice implements Device {
 
 	private	native	long	sdrplayInit (int freq, int gain, boolean ag);
         @Override
-	public	void    restartReader   () {
-	   sdr_restartReader (handle);
+	public	void    restartReader   (int f) {
+	   sdr_restartReader (handle, f);
 	}
         @Override
 	public	void    stopReader      () {
 	   sdr_stopReader (handle);
 	}
         @Override
-	public	void    setVFOFrequency (int f) {
-	   sdr_setVFOFrequency (handle, f);
-	}
-        @Override
-	public	int	getVFOFrequency () {
-	   return sdr_getVFOFrequency (handle);
-	}
-        @Override
 	public	void    resetBuffer     () {
 	   sdr_resetBuffer (handle);
 	}
-        @Override
-	public		int	bitDepth	() {return 12; }
-
         @Override
 	public	int	samples		() {
 	   return sdr_samples (handle);
@@ -64,7 +53,7 @@ public class sdrplayDevice implements Device {
 
 	@Override
 	public	void	autoGain	(boolean b) {
-	   sdr_autogain (handle, b);
+	   sdr_autoGain (handle, b);
 	}
 
 	@Override
@@ -90,13 +79,10 @@ public class sdrplayDevice implements Device {
 	                                                 int amount);
 	private	native	int	sdr_samples		(long handle);
 	private	native	void	sdr_resetBuffer		(long handle);
-	private	native	void	sdr_restartReader	(long handle);
+	private	native	void	sdr_restartReader	(long handle, int f);
 	private	native	void	sdr_stopReader		(long handle);
-	private	native	void	sdr_setVFOFrequency	(long handle,
-	                                                 int freq);
-	private	native	int	sdr_getVFOFrequency	(long handle);
 	private native	void	sdr_setGain		(long handle,
 	                                                 int g);
-	private	native	void	sdr_autogain		(long handle, 
+	private	native	void	sdr_autoGain		(long handle, 
 	                                                 boolean b);
 }

@@ -23,17 +23,11 @@ package devices;
 
 public class nullDevice implements Device {
         @Override
-	public	void    restartReader   ()	{}
+	public	void    restartReader   (int f)	{}
         @Override
 	public	void    stopReader      ()	{}
         @Override
-	public	void    setVFOFrequency (int v) {}
-        @Override
-	public	int	getVFOFrequency ()	{return 220000000;}
-        @Override
 	public	void    resetBuffer     ()	{}
-        @Override
-	public	int	bitDepth	()	{return 8;}
         @Override
 	public	int	samples		()	{return 0;}
         @Override

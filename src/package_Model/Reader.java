@@ -26,7 +26,6 @@ public class Reader {
 	private int     inputRate 	= 2048000;
 	private	int	currentPhase	= 0;
 	private	float	sLevel		= 0.0f;
-	private	int	bufferContent	= 0;
 	private	Boolean	running		= true;
 	final   private	float []	oscillatorTable;
         int sampleCount                 = 0;
@@ -61,21 +60,20 @@ public class Reader {
 	   int n	= v. length / 2;
 
 //	bufferContent is an indicator for the value of ... -> Samples ()
-	   if (bufferContent < n) {
-	      bufferContent = my_Device. samples ();
-	      while ((bufferContent < n) && running) {
-                 try {
-                    Thread. sleep (10);
-                 } catch (InterruptedException e) {
-                 }
-	         bufferContent = my_Device. samples ();
-	      }
+	   while ((my_Device. samples () < n) && running) {
+              try {
+                 Thread. sleep (10);
+              } catch (InterruptedException e) {
+              }
 	   }
-	   n = my_Device. getSamples (v, n);
 	   if (!running) {
 	      throw new Exception ();
 	   }
-	   bufferContent -= n;
+
+	   if (my_Device. samples () < v. length / 2)
+	      System. out. println ("asked " + v. length / 2 + " avail " +
+	                                      my_Device. samples ());
+	   n = my_Device. getSamples (v, v. length / 2);
 
 	   for (int i = 0; i < n; i ++) {
 	      currentPhase -= (int)(freqOffset);

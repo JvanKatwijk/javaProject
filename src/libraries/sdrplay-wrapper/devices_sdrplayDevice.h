@@ -42,10 +42,10 @@ JNIEXPORT void JNICALL Java_devices_sdrplayDevice_sdr_1resetBuffer
 /*
  * Class:     devices_sdrplayDevice
  * Method:    sdr_restartReader
- * Signature: (J)V
+ * Signature: (JI)V
  */
 JNIEXPORT void JNICALL Java_devices_sdrplayDevice_sdr_1restartReader
-	(JNIEnv *, jobject, jlong);
+	(JNIEnv *, jobject, jlong, jint);
 
 /*
  * Class:     devices_sdrplayDevice
@@ -55,13 +55,6 @@ JNIEXPORT void JNICALL Java_devices_sdrplayDevice_sdr_1restartReader
 JNIEXPORT void JNICALL Java_devices_sdrplayDevice_sdr_1stopReader
 	(JNIEnv *, jobject, jlong);
 
-/*
- * Class:     devices_sdrplayDevice
- * Method:    setVFOFrequency
- * Signature: (I)V
- */
-JNIEXPORT void JNICALL Java_devices_sdrplayDevice_sdr_1setVFOFrequency
-	(JNIEnv *, jobject, jlong,  jint);
 
 /*
  * Class:     devices_sdrplayDevice
@@ -70,14 +63,14 @@ JNIEXPORT void JNICALL Java_devices_sdrplayDevice_sdr_1setVFOFrequency
  */
 JNIEXPORT void JNICALL Java_devices_sdrplayDevice_sdr_1setGain
 	(JNIEnv *, jobject, jlong, jint);
-
 /*
  * Class:     devices_sdrplayDevice
- * Method:    sdr_getVFOFrequency
- * Signature: (J)I
+ * Method:    sdr_autogain
+ * Signature: (JI)V
  */
-JNIEXPORT jint JNICALL Java_devices_sdrplayDevice_sdr_1getVFOFrequency
-	(JNIEnv *, jobject, jlong);
+JNIEXPORT void
+        JNICALL Java_devices_sdrplayDevice_sdr_1autoGain
+                  (JNIEnv *env, jobject obj, jlong handle, jboolean gain);
 
 #ifdef __cplusplus
 }

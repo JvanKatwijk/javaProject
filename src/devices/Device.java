@@ -21,12 +21,9 @@
 package devices;
 
 public interface Device {
-	public	void    restartReader   ();
+	public	void    restartReader   (int f);
 	public	void    stopReader      ();
-	public	void    setVFOFrequency (int v);
-	public	int	getVFOFrequency ();
 	public	void    resetBuffer     ();
-	public	int	bitDepth	();
 	public	void	setGain		(int v);
 	public	void	autoGain	(boolean b);
 	public	int	samples		();

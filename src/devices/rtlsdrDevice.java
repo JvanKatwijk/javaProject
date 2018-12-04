@@ -26,27 +26,17 @@ public class rtlsdrDevice implements Device {
 	private	native	long	rtlsdrInit	(int freq,
 	                                         int gain, boolean ag);
         @Override
-	public	void    restartReader   () {
-	   rtlsdr_restartReader (handle);
+	public	void    restartReader   (int f) {
+	   rtlsdr_restartReader (handle, f);
 	}
         @Override
 	public	void    stopReader      () {
 	   rtlsdr_stopReader (handle);
 	}
         @Override
-	public	void    setVFOFrequency (int v) {
-	   rtlsdr_setVFOFrequency (handle, v);
-	}
-        @Override
-	public	int	getVFOFrequency () {
-	   return rtlsdr_getVFOFrequency (handle);
-	}
-        @Override
 	public	void    resetBuffer     () {
 	   rtlsdr_resetBuffer (handle);
 	}
-        @Override
-	public		int	bitDepth	() {return 8; }
         @Override
 	public	int	samples		() {
 	   return rtlsdr_samples (handle);
@@ -86,10 +76,8 @@ public class rtlsdrDevice implements Device {
 	                                                      int amount);
 	private	native	int	rtlsdr_samples	  (long handle);
 	private	native	void	rtlsdr_resetBuffer	(long handle);
-	private	native	void	rtlsdr_restartReader	(long handle);
+	private	native	void	rtlsdr_restartReader	(long handle, int freq);
 	private	native	void	rtlsdr_stopReader	(long handle);
-	private	native	void	rtlsdr_setVFOFrequency	(long handle, int freq);
-	private	native	int	rtlsdr_getVFOFrequency	(long handle);
 	private native	void	rtlsdr_setGain		(long handle, int g);
 	private	native	void	rtlsdr_autogain		(long handle, boolean b);
 }

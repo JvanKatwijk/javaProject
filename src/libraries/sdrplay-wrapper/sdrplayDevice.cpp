@@ -53,11 +53,12 @@ JNIEXPORT jlong
 JNIEXPORT void
 	JNICALL Java_devices_sdrplayDevice_sdr_1restartReader (JNIEnv *env,
 	                                                       jobject obj,
-	                                                       jlong handle) {
+	                                                       jlong handle,
+	                                                       jint freq) {
 	if (handle == 0)
            return;
         sdrplayHandler *h = reinterpret_cast <sdrplayHandler *> (handle);
-        h -> restartReader ();
+        h -> restartReader (freq);
 }
 
 /*
@@ -73,34 +74,6 @@ JNIEXPORT void
 	   return;
 	sdrplayHandler *h = reinterpret_cast <sdrplayHandler *> (handle);
         h -> stopReader ();
-}
-
-/*
- * Class:     devices_sdrplayDevice
- * Method:    setVFOFrequency
- * Signature: (JI)V
- */
-JNIEXPORT void
-	JNICALL Java_devices_sdrplayDevice_sdr_1setVFOFrequency
-	        (JNIEnv *env, jobject obj, jlong handle, jint freq) {
-	if (handle == 0)
-	   return;
-	sdrplayHandler *h = reinterpret_cast <sdrplayHandler *> (handle);
-        h -> setVFOFrequency (freq);
-}
-
-/*
- * Class:     devices_sdrplayDevice
- * Method:    getVFOFrequency
- * Signature: (J)I
- */
-JNIEXPORT jint
-	JNICALL Java_devices_sdrplayDevice_sdr_1getVFOFrequency
-	    (JNIEnv *env, jobject, jlong handle) {
-	if (handle == 0)
-	   return 0;
-	sdrplayHandler *h = reinterpret_cast <sdrplayHandler *> (handle);
-        return h -> getVFOFrequency ();
 }
 
 /*
@@ -138,6 +111,7 @@ int amount;
  * Method:    sdrplay_getSamples
  * Signature: (J[FI)I
  */
+
 JNIEXPORT jint JNICALL Java_devices_sdrplayDevice_sdr_1getSamples
   (JNIEnv *env, jobject obj, jlong handle, jfloatArray samples, jint amount) {
         if (handle == 0)
@@ -170,6 +144,11 @@ JNIEXPORT void
         h -> setGain (gain);
 }
 
+/*
+ * Class:     devices_sdrplayDevice
+ * Method:    autoGain
+ * Signature: (JI)V
+ */
 JNIEXPORT void
 	JNICALL Java_devices_sdrplayDevice_sdr_1autoGain
 	          (JNIEnv *env, jobject obj, jlong handle, jboolean gain){

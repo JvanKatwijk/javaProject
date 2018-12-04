@@ -73,11 +73,11 @@ JNIEXPORT void JNICALL Java_devices_airspyDevice_airspy_1resetBuffer
  * Signature: (J)V
  */
 JNIEXPORT void JNICALL Java_devices_airspyDevice_airspy_1restartReader
-  (JNIEnv * env, jobject obj, jlong handle) {
+  (JNIEnv * env, jobject obj, jlong handle, jint freq) {
 	if (handle == 0)
 	   return;
 	airspyHandler *h = reinterpret_cast <airspyHandler *> (handle);
-	h -> restartReader ();
+	h -> restartReader (freq);
 }
 
 /*
@@ -93,32 +93,6 @@ JNIEXPORT void JNICALL Java_devices_airspyDevice_airspy_1stopReader
         h -> stopReader ();
 }
 
-
-/*
- * Class:     devices_airspyDevice
- * Method:    airspy_setVFOFrequency
- * Signature: (JI)V
- */
-JNIEXPORT void JNICALL Java_devices_airspyDevice_airspy_1setVFOFrequency
-  (JNIEnv *env, jobject obj , jlong handle, jint freq) {
-	if (handle == 0)
-           return;
-        airspyHandler *h = reinterpret_cast <airspyHandler *> (handle);
-	h -> setVFOFrequency (freq);
-}
-
-/*
- * Class:     devices_airspyDevice
- * Method:    airspy_getVFOFrequency
- * Signature: (J)I
- */
-JNIEXPORT jint JNICALL Java_devices_airspyDevice_airspy_1getVFOFrequency
-  (JNIEnv *env , jobject obj , jlong handle) {
-       if (handle == 0)
-           return 0;
-        airspyHandler *h = reinterpret_cast <airspyHandler *> (handle);
-	return h -> getVFOFrequency ();
-}
 
 /*
  * Class:     devices_airspyDevice

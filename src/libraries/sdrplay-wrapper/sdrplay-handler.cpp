@@ -37,7 +37,7 @@ mir_sdr_DeviceT devDesc [4];
         this    -> ppmCorrection        = ppmCorrection;
         this    -> theGain              = 20 + gain * 39 / 100;
         this    -> deviceIndex          = 0;
-        this    -> agcMode		= mir_sdr_AGC_DISABLE;
+        this    -> agcMode		= false;
 
 	_I_Buffer	= NULL;
 	err		= mir_sdr_ApiVersion (&ver);
@@ -64,16 +64,16 @@ mir_sdr_DeviceT devDesc [4];
 
 	if (hwVersion == 255) {
 	   nrBits	= 14;
-	   denominator	= 16384.0;
+	   denominator	= 8192.0;
 	}
         else {
            nrBits	= 12;
-	   denominator	= 2048.0;
+	   denominator	= 1024.0;
 	}
 
 	_I_Buffer	= new RingBuffer<std::complex<float>>(8 * 1024 * 1024);
 //
-	mir_sdr_RSP_SetGr (theGain, 4, 1, 0);
+	mir_sdr_RSP_SetGr (theGain, 3, 1, 0);
 	running. store (false);
 }
 
@@ -85,75 +85,21 @@ mir_sdr_DeviceT devDesc [4];
 	   delete _I_Buffer;
 }
 //
-//	Not really needed as long as we only use the starting frequency
 #define	kHz(x)	(x * 1000)
-#define	mHz(x)	(kHz (x) * 1000)
-static inline
-int16_t	bankFor_sdr (int32_t freq) {
-	if (freq < 10 * kHz (1))
-	   return -1;
-	if (freq < 12 * mHz (1))
-	   return 1;
-	if (freq < 30 * mHz (1))
-	   return 2;
-	if (freq < 60 * mHz (1))
-	   return 3;
-	if (freq < 120 * mHz (1))
-	   return 4;
-	if (freq < 250 * mHz (1))
-	   return 5;
-	if (freq < 420 * mHz (1))
-	   return 6;
-	if (freq < 1000 * mHz (1))
-	   return 7;
-	if (freq < 2000 * mHz (1))
-	   return 8;
-	return -1;
-}
-
-void	sdrplayHandler::setVFOFrequency	(int32_t newFrequency) {
-mir_sdr_ErrT	err;
-int32_t	realFreq = newFrequency;
-int	gRdBSystem;
-int	samplesPerPacket;
-
-	if (bankFor_sdr (realFreq) == -1)
-	   return;
-
-	if (!running. load ()) {
-	   frequency = newFrequency;
-	   return;
-	}
-
-	if (bankFor_sdr (realFreq) == bankFor_sdr (frequency)) {
-	   mir_sdr_SetRf (float (realFreq), 1, 0);
-	   frequency	= realFreq;
-	   return;
-	}
-	stopReader	();
-	restartReader	();
-}
-
-int32_t	sdrplayHandler::getVFOFrequency	(void) {
-	return frequency;
-}
-
-int16_t	sdrplayHandler::maxGain	(void) {
-	return 101;
-}
+#define	MHz(x)	(kHz (x) * 1000)
 //
 //	For the setting of gain, not using a widget, we map the
 //	gain value upon an attenation value and set setexternal Gain
 void	sdrplayHandler::setGain		(int32_t g) {
 	theGain		= 20 + g * 39 / 100;
-	mir_sdr_RSP_SetGr (theGain, 4, 1, 0);
+	mir_sdr_RSP_SetGr (theGain, 3, 1, 0);
 }
 
-bool	sdrplayHandler::has_autogain	(void) {
-	return true;
-}
-
-void	sdrplayHandler::set_autogain	(bool b) {
+void	sdrplayHandler::set_autogain	(bool agcMode) {
+	this	-> agcMode = agcMode;
+	mir_sdr_AgcControl (agcMode ? mir_sdr_AGC_100HZ :
+                                      mir_sdr_AGC_DISABLE,
+                            -30, 0, 0, 0, 0, 4);
 }
 
 static
@@ -172,9 +118,10 @@ sdrplayHandler	*p	= static_cast<sdrplayHandler *> (cbContext);
 std::complex<float> localBuf [numSamples];
 float	denominator	= (float)(p -> denominator);
 
-	for (i = 0; i <  (int)numSamples; i ++)
+	for (i = 0; i <  (int)numSamples; i ++) {
 	   localBuf [i] = std::complex<float> (float (xi [i]) / denominator,
 	                                       float (xq [i]) / denominator);
+	}
 	p -> _I_Buffer -> putDataIntoBuffer (localBuf, numSamples);
 	(void)	firstSampleNum;
 	(void)	grChanged;
@@ -191,7 +138,7 @@ void	myGainChangeCallback (uint32_t	gRdB,
 	(void)cbContext;
 }
 
-bool	sdrplayHandler::restartReader	(void) {
+bool	sdrplayHandler::restartReader	(int frequency) {
 int	gRdBSystem;
 int	samplesPerPacket;
 mir_sdr_ErrT	err;
@@ -200,10 +147,11 @@ int	localGRed	= theGain;
 	if (running. load ())
 	   return true;
 
+	_I_Buffer	->  FlushRingBuffer ();
 	fprintf (stderr, "frequency = %d localGred = %d\n", frequency, localGRed);
 	err	= mir_sdr_StreamInit (&localGRed,
-	                              double (inputRate) / mHz (1),
-	                              double (frequency) / mHz (1),
+	                              double (inputRate) / MHz (1),
+	                              double (frequency) / MHz (1),
 	                              mir_sdr_BW_1_536,
 	                              mir_sdr_IF_Zero,
 	                              4,	// lnaEnable do not know yet
@@ -218,13 +166,14 @@ int	localGRed	= theGain;
 	   return false;
 	}
 
-	mir_sdr_SetPpm       ((float)ppmCorrection);
+//	mir_sdr_SetPpm       ((float)ppmCorrection);
         err             = mir_sdr_SetDcMode (4, 1);
         err             = mir_sdr_SetDcTrackTime (63);
-//
-        mir_sdr_SetSyncUpdatePeriod ((int)(inputRate / 2));
-        mir_sdr_SetSyncUpdateSampleNum (samplesPerPacket);
-        mir_sdr_DCoffsetIQimbalanceControl (0, 1);
+	if (agcMode) 
+	   mir_sdr_AgcControl (mir_sdr_AGC_100HZ,
+                               -30,
+                               0, 0, 0, 0, 4);
+
         running. store (true);
         return true;
 }
@@ -237,14 +186,15 @@ void	sdrplayHandler::stopReader	(void) {
 	running. store (false);
 }
 
-//
 //	Note that the sdrPlay returns 12/14 bit values
 int32_t	sdrplayHandler::getSamples (std::complex<float> *V, int32_t size) { 
-int32_t count	= 0;
-float	sum	= 0;
+int	i;
+int	amount;
 
-	count = _I_Buffer	-> getDataFromBuffer (V, size);
-	return count;
+	amount = _I_Buffer -> getDataFromBuffer (V, size);
+	if (size != amount)
+	   fprintf (stderr, "gevraagd %d, gekregen %d\n", size, amount);
+	return amount;
 }
 
 int32_t	sdrplayHandler::Samples	(void) {
@@ -253,9 +203,5 @@ int32_t	sdrplayHandler::Samples	(void) {
 
 void	sdrplayHandler::resetBuffer	(void) {
 	_I_Buffer	-> FlushRingBuffer ();
-}
-
-int16_t	sdrplayHandler::bitDepth	(void) {
-	return 12;
 }
 

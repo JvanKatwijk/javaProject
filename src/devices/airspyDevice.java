@@ -26,27 +26,17 @@ public class airspyDevice implements Device {
 	private	native	long	airspyInit	(int freq,
 	                                         int gain, boolean ag);
         @Override
-	public	void    restartReader   () {
-	   airspy_restartReader (handle);
+	public	void    restartReader   (int f) {
+	   airspy_restartReader (handle, f);
 	}
         @Override
 	public	void    stopReader      () {
 	   airspy_stopReader (handle);
 	}
         @Override
-	public	void    setVFOFrequency (int v) {
-	   airspy_setVFOFrequency (handle, v);
-	}
-        @Override
-	public	int	getVFOFrequency () {
-	   return airspy_getVFOFrequency (handle);
-	}
-        @Override
 	public	void    resetBuffer     () {
 	   airspy_resetBuffer (handle);
 	}
-        @Override
-	public		int	bitDepth	() {return 12; }
         @Override
 	public	int	samples		() {
 	   return airspy_samples (handle);
@@ -84,11 +74,9 @@ public class airspyDevice implements Device {
         
 	private native	int	airspy_getSamples (long handle, float [] v,
 	                                                      int amount);
-	private	native	int	airspy_samples	  (long handle);
+	private	native	int	airspy_samples	        (long handle);
 	private	native	void	airspy_resetBuffer	(long handle);
-	private	native	void	airspy_restartReader	(long handle);
+	private	native	void	airspy_restartReader	(long handle, int freq);
 	private	native	void	airspy_stopReader	(long handle);
-	private	native	void	airspy_setVFOFrequency	(long handle, int freq);
-	private	native	int	airspy_getVFOFrequency	(long handle);
 	private native	void	airspy_setGain		(long handle, int g);
 }

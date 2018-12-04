@@ -47,7 +47,6 @@ public class DabProcessor extends Thread {
 	                     ficHandler	my_ficHandler,
 	                     PhaseReference my_phaseReference,
 	                     Reader	my_Reader,
-	                     DabBackend	dbe,
 	                     RadioModel theScreen) {
 	   this. my_params	= my_params;
 	   this. scanning	= scanning;
@@ -55,13 +54,12 @@ public class DabProcessor extends Thread {
 	   this. my_ficHandler	= my_ficHandler;
 	   this. my_Reader	= my_Reader;
 	   this. my_phaseReference	= my_phaseReference;
-	   my_dabBackend	= dbe;
 	   theGUI		= theScreen;
 
            my_ofdmDecoder       = new OfdmDecoder (my_params,
 	                                           my_ficHandler,
-	                                           my_dabBackend,
                                                    theScreen);
+	   my_dabBackend	= new DabBackend  (my_params, theScreen);
 	   t_s			= my_params. get_T_s ();
 	   t_u			= my_params. get_T_u ();
 	   carriers		= my_params. get_carriers ();
@@ -89,7 +87,7 @@ public class DabProcessor extends Thread {
            my_Device. resetBuffer ();
            my_Reader. setRunning (true);
 	   inSync	= false;
-	   my_ofdmDecoder. start ();
+	   my_dabBackend. start ();
 	   try {
 	      float [] s_Sample = new float [2];
 	      for (int i = 0; i < t_F / 2; i ++) {
@@ -129,8 +127,9 @@ public class DabProcessor extends Thread {
 	                        envBuffer [(syncBufferIndex - 100) & syncBufferMask];
 	              syncBufferIndex = (syncBufferIndex + 1) & syncBufferMask;
 	              counter ++;
-	              if (counter > t_F)  // hopeless
+	              if (counter > t_F) {  // hopeless
 	                 break;
+	              }
 	            }
 	            if (counter > t_F) {
 	               if (scanning) {
@@ -167,8 +166,9 @@ public class DabProcessor extends Thread {
 	               syncBufferIndex = (syncBufferIndex + 1) & syncBufferMask;
 	               counter     ++;
 //
-	               if (counter > t_null + 100)  // hopeless
+	               if (counter > t_null + 100) { // hopeless
 	                  break;
+	               }
 	            }
 	            if (counter > t_null + 100)
 	               continue;
@@ -223,6 +223,7 @@ public class DabProcessor extends Thread {
 //	and prepare the reference values for decoding
 	         my_ofdmDecoder. processBlock (ofdmBuffer, 0);
 //	         my_ofdmDecoder. processBlock_0 (ofdmBuffer);
+	         my_dabBackend. processBlock (ofdmBuffer, 0);
 
 //      Here we look only at the block_0 when we need a coarse
 //      frequency synchronization.
@@ -240,7 +241,29 @@ public class DabProcessor extends Thread {
 //      corresponding samples in the datapart.
 	         float freqCorr_re  = 0.0f;
 	         float freqCorr_im  = 0.0f;
-	         for (int ofdmSymbolCount = 1;
+	         int   ofdmSymbolCount;
+	         for (ofdmSymbolCount = 1;
+	              ofdmSymbolCount < 4; ofdmSymbolCount ++) {
+	            my_Reader. getSamples (tg_Buffer,
+	                                   coarseCorrector + fineCorrector);
+	            my_Reader. getSamples (ofdmBuffer,
+	                                   coarseCorrector + fineCorrector);
+	   
+	            for (int i = 0; i < t_g; i ++) {
+	              Float re_ofdm = ofdmBuffer [2 * (t_u - t_g + i)];
+	              Float im_ofdm = ofdmBuffer [2 * (t_u - t_g + i) + 1];
+	              Float re_tg   =   tg_Buffer [2 * i];
+	              Float im_tg   = - tg_Buffer [2 * i + 1];
+	              freqCorr_re  += re_ofdm * re_tg - im_ofdm * im_tg;
+	              freqCorr_im  += re_ofdm * im_tg + im_ofdm * re_tg;
+	            }
+	            my_ofdmDecoder. processBlock (ofdmBuffer,
+	                                            ofdmSymbolCount);
+	            my_dabBackend. processBlock  (ofdmBuffer,
+	                                            ofdmSymbolCount);
+	         }
+
+	         for (ofdmSymbolCount = 4;
 	              ofdmSymbolCount <  nrBlocks; ofdmSymbolCount ++) {
 	            my_Reader. getSamples (tg_Buffer,
 	                                   coarseCorrector + fineCorrector);
@@ -255,8 +278,7 @@ public class DabProcessor extends Thread {
 	              freqCorr_re  += re_ofdm * re_tg - im_ofdm * im_tg;
 	              freqCorr_im  += re_ofdm * im_tg + im_ofdm * re_tg;
 	            }
-
-	            my_ofdmDecoder. processBlock (ofdmBuffer,
+	            my_dabBackend. processBlock (ofdmBuffer,
 	                                                ofdmSymbolCount);
 	         }
 
@@ -274,7 +296,7 @@ public class DabProcessor extends Thread {
 	
 	      }
 	   } catch (Exception e) {
-//	      System. out. println (e.getMessage());
+//	      System. out. println (e. getMessage ());
 //	      System. out. println ("stopping the ofdmProcessor");
 	   }
 	}
@@ -285,7 +307,7 @@ public class DabProcessor extends Thread {
 	       this. join ();
                Thread. sleep (1000);
            } catch (Exception e) {}
-	   my_ofdmDecoder. stopRunning ();
+	   my_dabBackend. stopRunning ();
 }
 
 	public	void	reset () {

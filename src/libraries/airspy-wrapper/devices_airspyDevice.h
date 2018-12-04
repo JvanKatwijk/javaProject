@@ -45,7 +45,7 @@ JNIEXPORT void JNICALL Java_devices_airspyDevice_airspy_1resetBuffer
  * Signature: (J)V
  */
 JNIEXPORT void JNICALL Java_devices_airspyDevice_airspy_1restartReader
-  (JNIEnv *, jobject, jlong);
+  (JNIEnv *, jobject, jlong, jint);
 
 /*
  * Class:     devices_airspyDevice
@@ -53,22 +53,6 @@ JNIEXPORT void JNICALL Java_devices_airspyDevice_airspy_1restartReader
  * Signature: (J)V
  */
 JNIEXPORT void JNICALL Java_devices_airspyDevice_airspy_1stopReader
-  (JNIEnv *, jobject, jlong);
-
-/*
- * Class:     devices_airspyDevice
- * Method:    airspy_setVFOFrequency
- * Signature: (JI)V
- */
-JNIEXPORT void JNICALL Java_devices_airspyDevice_airspy_1setVFOFrequency
-  (JNIEnv *, jobject, jlong, jint);
-
-/*
- * Class:     devices_airspyDevice
- * Method:    airspy_getVFOFrequency
- * Signature: (J)I
- */
-JNIEXPORT jint JNICALL Java_devices_airspyDevice_airspy_1getVFOFrequency
   (JNIEnv *, jobject, jlong);
 
 /*

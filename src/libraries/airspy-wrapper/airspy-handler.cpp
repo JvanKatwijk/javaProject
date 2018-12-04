@@ -38,7 +38,8 @@ uint32_t samplerate_count;
 
 	this	-> frequency	= frequency;
 	this	-> ppmCorrection = ppmCorrection;
-//
+	this	-> theGain	= theGain;
+
 	device			= 0;
 	serialNumber		= 0;
 	theBuffer		= NULL;
@@ -103,8 +104,7 @@ uint32_t samplerate_count;
 //	Here we set the gain and frequency
 
 	(void)airspy_set_freq (device, frequency);
-	gain		= theGain * 21 / 100;
-	(void) airspy_set_sensitivity_gain (device, gain);
+	(void) airspy_set_sensitivity_gain (device, theGain * 21 / 100);
 }
 
 	airspyHandler::~airspyHandler (void) {
@@ -132,20 +132,7 @@ err:
 	   delete theBuffer;
 }
 
-void	airspyHandler::setVFOFrequency (int32_t nf) {
-int result = airspy_set_freq (device, frequency = nf);
-
-	if (result != AIRSPY_SUCCESS) {
-	   printf ("airspy_set_freq() failed: %s (%d)\n",
-	            airspy_error_name ((airspy_error)result), result);
-	}
-}
-
-int32_t	airspyHandler::getVFOFrequency (void) {
-	return frequency;
-}
-
-bool	airspyHandler::restartReader	(void) {
+bool	airspyHandler::restartReader	(int32_t freq) {
 int	result;
 int32_t	bufSize	= EXTIO_NS * EXTIO_BASE_TYPE_SIZE * 2;
 
@@ -160,8 +147,9 @@ int32_t	bufSize	= EXTIO_NS * EXTIO_BASE_TYPE_SIZE * 2;
 	   return false;
 	}
 
-	result = airspy_set_sensitivity_gain (device, gain);
-	
+	(void)airspy_set_freq (device, frequency);
+        (void) airspy_set_sensitivity_gain (device, theGain * 21 / 100);
+
 	result = airspy_start_rx (device,
 	            (airspy_sample_block_cb_fn)callback, this);
 	if (result != AIRSPY_SUCCESS) {
@@ -299,10 +287,6 @@ void	airspyHandler::resetBuffer (void) {
 	theBuffer	-> FlushRingBuffer ();
 }
 
-int16_t	airspyHandler::bitDepth (void) {
-	return 13;
-}
-
 int32_t	airspyHandler::getSamples (std::complex<float> *v, int32_t size) {
 
 	return theBuffer	-> getDataFromBuffer (v, size);
@@ -324,7 +308,7 @@ uint8_t bid;
 //
 
 void	airspyHandler::setGain		(int value) {
-	gain	= value * 21 / 100;
-	(void) airspy_set_sensitivity_gain (device, gain);
+	theGain	= value;
+	(void) airspy_set_sensitivity_gain (device, theGain * 21 / 100);
 }
 

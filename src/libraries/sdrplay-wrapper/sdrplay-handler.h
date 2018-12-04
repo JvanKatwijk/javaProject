@@ -53,18 +53,13 @@ public:
 	                                 int16_t        gain);
 
 		~sdrplayHandler		(void);
-	void	setVFOFrequency		(int32_t);
-	int32_t	getVFOFrequency		(void);
 
-	bool	restartReader		(void);
+	bool	restartReader		(int);
 	void	stopReader		(void);
 	int32_t	getSamples		(std::complex<float> *, int32_t);
 	int32_t	Samples			(void);
 	void	resetBuffer		(void);
-	int16_t	maxGain			(void);
-	int16_t	bitDepth		(void);
 	void	setGain			(int32_t);
-	bool	has_autogain		(void);
 	void	set_autogain		(bool);
 	RingBuffer<std::complex<float>>	*_I_Buffer;
 	float		denominator;
@@ -78,7 +73,7 @@ private:
 	int16_t		ppmCorrection;
 	int		theGain;
 	std::atomic<bool>	running;
-	mir_sdr_AgcControlT agcMode;
+	bool		 agcMode;
 };
 #endif
 

@@ -65,7 +65,7 @@ public class	DabAudio extends DabVirtual {
            nextIn               = 0;
            nextOut              = 0;
 
-	   interleaveData  = new int[16][]; // max size
+	   interleaveData  = new int [16][]; // max size
 	   for (int i = 0; i < 16; i ++) {
 	      interleaveData [i] = new int [fragmentSize];
 	   }

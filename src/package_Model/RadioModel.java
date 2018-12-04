@@ -36,11 +36,9 @@ public class RadioModel {
 	                                         2048000, this);
 	}
 
-
 	private	boolean channel_active = false;
 	public void selectChannel (int frequency, boolean scanning) {
 	   my_device. stopReader ();
-	   my_device. setVFOFrequency (frequency * 1000);
 	   my_ficHandler. reset ();
 	   dabProcessor	= new DabProcessor (my_params,
 	                                    scanning,
@@ -48,11 +46,11 @@ public class RadioModel {
 	                                    my_ficHandler,
 	                                    my_phaseReference,
 	                                    my_Reader,
-	                                    my_Backend,
 	                                    this);
 //	restart the dabprocessor
 	   dabProcessor. start ();
-	   my_device. restartReader ();
+	   
+	   my_device. restartReader (frequency * 1000);
 	   channel_active	= true;
 	}
 

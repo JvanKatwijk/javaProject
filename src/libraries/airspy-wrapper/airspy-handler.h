@@ -41,20 +41,17 @@ class airspyHandler {
 public:
 			airspyHandler		(int32_t, int16_t, int16_t);
 			~airspyHandler		(void);
-	void		setVFOFrequency		(int32_t);
-	int32_t		getVFOFrequency		(void);
-	bool		restartReader		(void);
+	bool		restartReader		(int32_t);
 	void		stopReader		(void);
 	int32_t		getSamples		(std::complex<float> *v,
 	                                                     int32_t size);
 	int32_t		Samples			(void);
 	void		resetBuffer		(void);
-	int16_t		bitDepth		(void);
 	void		setGain			(int32_t);
 private:
 	int32_t		frequency;
 	int16_t		ppmCorrection;
-	int16_t		gain;
+	int16_t		theGain;
 	HINSTANCE	Handle;
 	bool		libraryLoaded;
 	bool		success;
