@@ -32,7 +32,6 @@ public	class DabBackend extends Thread {
 	private		DabVirtual dabHandler		= new DabVirtual ();
 	private final	FreqInterleaver my_Mapper;
 	private final	FFT_NEW         javaFFT;
-	private final	fftHandler      nativeFFT;
 	private		boolean	work_to_be_done = false;
 	private	final	DabParams	params;
 	private	final	int		mode;
@@ -46,7 +45,6 @@ public	class DabBackend extends Thread {
 	private final	int		nrBlocks;
 	private final	int []		ibits;
 	private final	float [] 	phaseReference;
-	private	final	ProgramData	pd	= new ProgramData ();
 	private		int		frameCount_1;
 	private final	float [][]	theData;
 	private		int		nextIn;
@@ -61,7 +59,6 @@ public	class DabBackend extends Thread {
 	   carriers	= params. get_carriers ();
 	   mode		= params. get_dabMode ();
 	   javaFFT	= new FFT_NEW (params. get_T_u ());
-	   nativeFFT	= new fftHandler (params. get_dabMode ());
            bitsperBlock = 2 * carriers;
 	   my_Mapper	= new FreqInterleaver   (params);
 	   t_s		= params. get_T_s ();
@@ -152,8 +149,7 @@ public	class DabBackend extends Thread {
   *	further processing is different though
   */
 	public void	decodeMscblock (float [] fft_buffer, int blkno) {
-//	   javaFFT.  fft (fft_buffer);
-	   nativeFFT.  do_FFT (fft_buffer, 1);
+	   javaFFT.  fft (fft_buffer);
 	   for (int i = 0; i < carriers; i ++) {
 	      int	index	= my_Mapper.  mapIn (i);
 	      if (index < 0) index += t_u;
@@ -205,10 +201,10 @@ public	class DabBackend extends Thread {
 //	This might be a dummy handler
 	    try {
                 synchronized (this) {
-	           myBegin	= pd.startAddr * CU_SIZE;
+	           myBegin	= dabHandler. startAddress () * CU_SIZE;
 	           dabHandler. process (cifVector,
 	                                myBegin,
-	                                pd. length * CU_SIZE);
+	                                dabHandler. length () * CU_SIZE);
                 }
 	    } catch (Exception e) {
 	       System. out. println (e. getMessage ());
@@ -219,17 +215,18 @@ public	class DabBackend extends Thread {
 //	In the (may be far) future we might want the processing
 //	of the data to be done in a separate thread, so we first
 //	copy the program data
-	public void	setAudioChannel (ProgramData d) {
+	public void	setAudioChannel (AudioData d) {
+	   AudioData ad = new AudioData ();
 	   synchronized (this) {
 	      dabHandler. stopRunning ();
 	      work_to_be_done	= false;
-	      pd. shortForm	= d. shortForm;
-	      pd. startAddr	= d. startAddr;
-	      pd. length	= d. length;
-	      pd. protLevel	= d. protLevel;
-	      pd. bitRate	= d. bitRate;
-	      pd. ASCTy		= d. ASCTy;
-	      dabHandler	= new DabAudio (pd, theGUI);
+	      ad. shortForm	= d. shortForm;
+	      ad. startAddr	= d. startAddr;
+	      ad. length	= d. length;
+	      ad. protLevel	= d. protLevel;
+	      ad. bitRate	= d. bitRate;
+	      ad. ASCTy		= d. ASCTy;
+	      dabHandler	= new DabAudio (ad, theGUI);
 	      work_to_be_done	= true;
 	   }
 	   
@@ -237,6 +234,20 @@ public	class DabBackend extends Thread {
 	   System. out. print (" length = " + d. length + " bitRate " + d. bitRate);
 	   System. out. println (" + protLevel " + d. protLevel);
 	}
+
+	public void	setDataChannel (PacketData pd) {
+	   synchronized (this) {
+	      dabHandler. stopRunning ();
+	      work_to_be_done	= false;
+	      dabHandler	= new DabData (pd, theGUI);
+	      work_to_be_done	= true;
+	   }
+	   
+	   System. out. print ("setting channel startaddress " + pd. startAddr);
+	   System. out. print (" length = " + pd. length + " bitRate " + pd. bitRate);
+	   System. out. println (" + protLevel " + pd. protLevel);
+	}
+
 
 	public void reset      () {
 	   work_to_be_done = false;

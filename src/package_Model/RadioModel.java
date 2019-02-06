@@ -16,7 +16,7 @@ public class RadioModel {
 	private	final	ficHandler	my_ficHandler;
 	private	final	PhaseReference	my_phaseReference;
 	private	final	Reader		my_Reader;
-	private final	DabBackend		my_Backend;
+	private final	DabBackend	my_Backend;
 
 	private	DabProcessor		dabProcessor;
 	private final List<modelSignals> listener = new ArrayList<>();
@@ -87,21 +87,29 @@ public class RadioModel {
         }
 
 	public	void	setService (String s) {
-	   ProgramData p = new ProgramData ();
-	   dabProcessor. serviceData (s, p);
-	   if (!p. defined)
-	      return;
-	   dabProcessor. selectService (p);
+	   dabProcessor. selectService (s);
 	}
 
 	public void newService (String s, String ch) {
-	   ProgramData p = new ProgramData ();
-	   dabProcessor. serviceData (s, p);
-	   if (!p. defined)
-	      return;
-           listener.forEach((hl) -> {
-               hl. newService (s, p);
-            });
+	   if (dabProcessor. is_audioService (s)) {
+	      AudioData as = new AudioData ();
+	      dabProcessor. audioservice_Data (s, as);
+	      if (!as. defined)
+	         return;
+              listener.forEach ((hl) -> {
+                 hl. newService (s, as);
+              });
+	   }
+	   else
+	   if (dabProcessor. is_packetService (s)) {
+	      PacketData ps = new PacketData ();
+	      dabProcessor. packetservice_Data (s, ps);
+	      if (!ps. defined)
+	         return;
+              listener.forEach ((hl) -> {
+                 hl. newService (s, ps);
+              });
+	   }
 	}
 
 	public	void updateEnsembleLabel (String Name, int Sid) {

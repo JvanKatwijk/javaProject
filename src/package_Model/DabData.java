@@ -3,19 +3,19 @@
  *    Jan van Katwijk (J.vanKatwijk@gmail.com)
  *    Lazy Chair Programming
  *
- *    This file is part of java DAB
+ *    This file is part of javaProject
  *    java DAB is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
  *    the Free Software Foundation; either version 2 of the License, or
  *    (at your option) any later version.
  *
- *    java DAB is distributed in the hope that it will be useful,
+ *    java Projectis distributed in the hope that it will be useful,
  *    but WITHOUT ANY WARRANTY; without even the implied warranty of
  *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with java DAB; if not, write to the Free Software
+ *    along with java Project; if not, write to the Free Software
  *    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 package package_Model;
@@ -23,19 +23,14 @@ import	utils.*;
 import	java.util.concurrent.Semaphore;
 import  java.util.concurrent.TimeUnit;
 
-public class	DabAudio extends DabVirtual {
-	private final	AudioData my_programData;
+public class	DabData extends DabVirtual {
+	private final	PacketData my_programData;
 	private final	int	CU_SIZE		= 4 * 16;
-	private final	int	dabModus;
-	private final	int	DAB_PLUS	= 0100;
-	private final	int	DAB		= 0101;
 	private final	byte []	outV;
-	private final	int [][]	interleaveData;
+	private final	int [][] interleaveData;
         private final	int	fragmentSize;
 	private final	Protection protectionHandler;
-	private final	AudioProcessor audioProcessor;
-	private final	PCMwrapper	soundHandler;
-//	private final	SoundCard	soundHandler;
+	private final	DataProcessor dataProcessor;
 	      private	int countforInterleaver  = 0;
 	      private	int interleaverIndex     = 0;
 	private final	byte [] shiftRegister    = new byte [9];
@@ -49,7 +44,7 @@ public class	DabAudio extends DabVirtual {
 	private	final	Semaphore	usedSlots;
         private         boolean running;
 
-        public DabAudio (AudioData pd, RadioModel theScreen) {
+        public DabData (PacketData pd, RadioModel theScreen) {
 //	System. out. println ("we made it to here");
 	   my_programData	= pd;
 	   startAddr		= pd. startAddr;
@@ -57,7 +52,6 @@ public class	DabAudio extends DabVirtual {
 	   fragmentSize		= pd. length * CU_SIZE;
 	   dataV 		= new int [fragmentSize];
 	   tempX 		= new int [fragmentSize];
-	   dabModus		= pd. ASCTy == 077 ? DAB_PLUS : DAB;
 	   outV			= new byte [pd. bitRate * 24];
 	   theData		= new int [20] [];
 	   for (int i = 0; i < 20; i ++)
@@ -79,16 +73,7 @@ public class	DabAudio extends DabVirtual {
 	      protectionHandler    = new EEP_protection (pd. bitRate,
 	                                                 pd. protLevel);
 //
-	   soundHandler		= new PCMwrapper ();
-//	   soundHandler		= new SoundCard ();
-	   if (dabModus == DAB_PLUS)
-	      audioProcessor = new MP4_Processor (pd. bitRate,
-	                                          theScreen,
-	                                          soundHandler);
-	   else
-	      audioProcessor = new MP2_Processor (pd. bitRate,
-	                                          theScreen,
-	                                          soundHandler);
+	   dataProcessor	= new DataProcessor (pd);
 
 	   for (int i = 0; i < 9; i ++)
                shiftRegister [i] = 1;
@@ -108,7 +93,6 @@ public class	DabAudio extends DabVirtual {
 	   running = false;
             try {
 	       this. join ();
-	       soundHandler. stopCard ();
             } catch (Exception e) {}
 	}
         
@@ -132,8 +116,7 @@ public class	DabAudio extends DabVirtual {
 
         @Override
 	public void	run () {
-           System. out. println ("Audiohandler is gestart");
-	   soundHandler. start ();
+           System. out. println ("Datahandler is gestart");
            synchronized (this) {
               running = true;
            }
@@ -175,8 +158,7 @@ public class	DabAudio extends DabVirtual {
 	   for (int i = 0; i < my_programData. bitRate * 24; i ++) 
 	      outV [i] ^= disperseVector [i];
 
-           audioProcessor. addtoFrame (outV);
+           dataProcessor. addtoFrame (outV);
         }
-	
 }
 

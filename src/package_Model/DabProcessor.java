@@ -324,20 +324,49 @@ public class DabProcessor extends Thread {
 	   correctionNeeded	= false;
 	}
 
-	public	void	serviceData   (String s, ProgramData p) {
-	   my_ficHandler. serviceData (s, p);
+	public	void	audioservice_Data   (String s, AudioData p) {
+	   p. defined = false;
+	   if (is_audioService (s))
+	      my_ficHandler. audioservice_Data (s, p);
 	}
 
-	public	void	selectService (ProgramData p) {
+	public void	packetservice_Data (String s, PacketData p) {
+	   p. defined = false;
+	   if (is_packetService (s))
+	      my_ficHandler. packetservice_Data (s, p);
+	}
+
+	public	void	selectService (String s) {
 	   if (correctionNeeded) {
-	      p. defined = false;
 	      return;
 	   }
-	   my_dabBackend. setAudioChannel (p);
+	   if (my_ficHandler. is_audioService (s)) {
+	      AudioData as = new AudioData ();
+	      my_ficHandler. audioservice_Data (s, as);
+	      if (!as. defined)
+	         return;
+	      my_dabBackend. setAudioChannel (as);
+	   }
+	   else
+	   if (my_ficHandler. is_packetService (s)) {
+	      PacketData ps = new PacketData ();
+	      System. out. println ("going to start " + s);
+	      my_ficHandler. packetservice_Data (s, ps);
+	      if (ps. defined)
+	         System. out. println ("service is defined");
+	      if (!ps. defined)
+	         return;
+	      
+	      my_dabBackend. setDataChannel (ps);
+	   }
 	}
 
-	public	boolean	is_audioChannel (String s) {
-	   return my_ficHandler. is_audioChannel (s);
+	public	boolean	is_audioService (String s) {
+	   return my_ficHandler. is_audioService (s);
+	}
+
+	public	boolean is_packetService (String s) {
+	   return my_ficHandler. is_packetService (s);
 	}
         
         void    setSync (boolean f) {

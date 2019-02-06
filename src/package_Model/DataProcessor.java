@@ -1,7 +1,8 @@
+
 /*
  *    Copyright (C) 2017
  *    Jan van Katwijk (J.vanKatwijk@gmail.com)
- *    Lazy Chair Computing
+ *    Lazy Chair Programming
  *
  *    This file is part of java DAB
  *    java DAB is free software; you can redistribute it and/or modify
@@ -18,25 +19,29 @@
  *    along with java DAB; if not, write to the Free Software
  *    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
 package package_Model;
+	public class DataProcessor {
+	   private int	bitRate;
+	   private int	DSCTy;
+	   private int	appType;
+	   private int	packetAddress;
+	   private int	DGflag;
+	   private int	FEC_scheme;
+	   public	DataProcessor	(PacketData pd) {
+	      bitRate	= pd. bitRate;
+              DSCTy	= pd. DSCTy;
+              appType	= pd. appType;
+              packetAddress = pd. packetAddress;
+              DGflag	= pd. DGflag;
+              FEC_scheme = pd. FEC_scheme;
 
-//      dummy for the dab handler. Maybe one day, we'll add data support
-//      as an extension to DabVirtual
-
-	public class DabVirtual extends Thread {
-	   public int startAddr	= 0;
-	   public int theLength	= 0;
-	   
-	   public DabVirtual  () { }
-
-	   public void	process		(int[] v, int index, int c) {}
-
-	   public void	stopRunning	() { }
-	   public int	startAddress	() {
-	      return startAddr;
+	      System. out. println (bitRate + " " + DSCTy + " " + appType + " " + packetAddress + " " + DGflag + " " + FEC_scheme);
 	   }
-	   public int	length		() {
-	      return theLength;
+
+	   public void	addtoFrame	(byte [] v) {
 	   }
+
+	   public void	stop		() {};
 }
 

@@ -30,7 +30,6 @@ public class PhaseReference {
 	private final	DabParams	my_params;
 	private final	float []	phaseDifferences;
 	private	final	FFT_NEW		javaFFT;	
-	private	final	fftHandler	nativeFFT;	
 	private final	float []	refTable;
 	private final	PhaseTable      my_phaseTable;
 	private final	float []	workVector;
@@ -39,7 +38,6 @@ public class PhaseReference {
 	   Double Phi_k;
            my_params            = new DabParams (mode);
 	   javaFFT		= new FFT_NEW (my_params. get_T_u ());
-	   nativeFFT		= new fftHandler (mode);
            int t_u              = my_params. get_T_u ();
 	   threshold		= t;
 	   diff_length		= d;
@@ -84,7 +82,6 @@ final	   int  t_g	= my_params. get_T_g ();
 	
            System. arraycopy (v, 0, workVector, 0, 2 * t_u);
 	   javaFFT. fft (workVector);
-//	   nativeFFT. do_FFT (workVector, 1);
            for (int i = 0; i < t_u; i ++) {
 	      float re_1		=   workVector [2 * i    ];
 	      float im_1		=   workVector [2 * i + 1];
@@ -94,7 +91,6 @@ final	   int  t_g	= my_params. get_T_g ();
 	      workVector [2 * i + 1]	=   re_1 * im_2 + re_2 * im_1;
 	   }
 	   javaFFT. ifft (workVector);
-//	   nativeFFT. do_FFT (workVector, -1);
 
 //
 //	compute the "average" signal value
@@ -128,7 +124,6 @@ final	   int  t_g	= my_params. get_T_g ();
 
            System. arraycopy (v, 0, workVector, 0, v. length);
 	   javaFFT. fft (workVector);
-//	   nativeFFT. do_FFT (workVector, 1);
 	   float	diff;
 	   float	Mmin = 10000.0f;
 //

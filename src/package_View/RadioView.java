@@ -343,7 +343,7 @@ public class RadioView extends JFrame {
 
 	JFrame	notifier	= new JFrame ();
 	JLabel	Label_6		= new JLabel ();
-	public	void	showProgramdata (String		serviceName,
+	public	void	show_audioData (String		serviceName,
 	                                 String		channel,
 	                                 int		startAddr,
 	                                 int		length,
@@ -384,6 +384,52 @@ public class RadioView extends JFrame {
 	   notifier. pack ();
 	   notifier. setVisible (true);
 	}
+
+	public	void	show_packetData (String		serviceName,
+	                                 String		channel,
+	                                 int		startAddr,
+	                                 int		length,
+	                                 boolean	shortForm,
+	                                 int		bitRate,
+	                                 int 		protLevel,
+	                                 int		FEC_scheme,
+	                                 int		appType) {
+	   notifier. setPreferredSize (new Dimension (200, 200));
+	   JPanel	main	= new JPanel ();
+	   main. setLayout (new BoxLayout (main, BoxLayout. Y_AXIS));
+	   notifier. setTitle (serviceName);
+	   JLabel Label_0	= new JLabel ("channel " + channel);
+	   JLabel Label_1	= new JLabel ("startAddr " + startAddr);
+	   JLabel Label_2	= new JLabel ("length " + length);
+	   JLabel Label_3	= new JLabel ("bitRate " + bitRate);
+	   String protL;
+	   if (!shortForm) {
+	      protL = "EEP ";
+	      protL = protL + ((protLevel & 03) + 1);
+	      if ((protLevel & (1 << 2)) == 0)
+	         protL += "-A";
+	      else
+	         protL += "-B";
+	   }
+	   else  {
+	      protL = "UEP " + protLevel;
+	   }
+	   JLabel Label_4      = new JLabel ("protection " + protL);
+	   JLabel Label_5      = new JLabel ("FEC scheme " + FEC_scheme);
+	   JLabel Label_a      = new JLabel ("app type   " + appType);
+	   main. add (Label_0);
+	   main. add (Label_1);
+	   main. add (Label_2);
+	   main. add (Label_3);
+	   main. add (Label_4);
+	   main. add (Label_5);
+	   main. add (Label_a);
+	   main. add (Label_6);
+	   notifier. add (main);
+	   notifier. pack ();
+	   notifier. setVisible (true);
+	}
+
 
 	private	JFrame pictureFrame	= new JFrame ();
 

@@ -134,7 +134,10 @@ static final int PROT_LEVEL [][]   = {{16, 5,32},	// Index 0
            public int           packetAddress;
            public int           DSCTy;
            public int           DGFlag;
+	   public int		appType;
+	   public int		FEC_scheme;
 	   public boolean	is_madePublic;
+	 
 	   public serviceComponent () {
 	      inUse	= false;
 	      componentnr = -1;
@@ -215,6 +218,10 @@ int	d		= 0;	// the index
 
 	      case 3:
 	         extension3_FIG0 (p, d);
+	         break;
+
+	      case 13:
+	         extension13_FIG0 (p, d);
 	         break;
 
 	      case 17:
@@ -304,6 +311,9 @@ int	tableIndex;
 	}
 	return bitOffset / 8;	// we return bytes used
 }
+//
+//      Service organization, 6.3.1
+//      bind channels to serviceIds
 
 	private void	extension2_FIG0 (byte [] p, int d) {
 int	used    = 2;            // offset in bytes
@@ -387,7 +397,7 @@ int serviceIndex;
            offset += 16 / 8;
         }
         offset += 40 / 8;
-        
+
         if (compIndex == -1)         // no serviceComponent yet
            return offset;
 
@@ -424,6 +434,66 @@ int serviceIndex;
         ServiceComps [compIndex]. DGFlag       = DGflag;
         ServiceComps [compIndex]. packetAddress        = packetAddress;
         return offset;
+}
+
+//
+//	User Application Information 6.3.6
+	private void	extension13_FIG0 (byte [] p, int d) {
+int	used	= 2;		// offset in bytes
+int	Length	= getBits (p, d, 3, 5);
+int	PD_bit	= getBits (p, d, 8 + 2, 1);
+
+	while (used < Length) 
+	   used = HandleFIG0Extension13 (p, d, used, PD_bit);
+}
+
+int	HandleFIG0Extension13 (byte [] p,
+	                       int  d,
+	                       int used,
+	                       int pdBit) {
+int	lOffset		= used * 8;
+int	SId	= getBits (p, d, lOffset, pdBit == 1 ? 32 : 16);
+int	SCId;
+int	NoApplications;
+int	appType;
+int	s	= findServiceIndex (SId);
+int	i;
+
+	lOffset		+= pdBit == 1 ? 32 : 16;
+	SCId		= getBits (p, d, lOffset, 4);
+	NoApplications	= getBits (p, d, lOffset + 4, 4);
+	lOffset += 8;
+
+	for (i = 0; i < NoApplications; i ++) {
+	   appType		= getBits (p, d, lOffset, 11);
+	   int	length		= getBits (p, d, lOffset + 11, 5);
+	   lOffset 		+= (11 + 5 + 8 * length);
+
+	   int packetCompIndex	= find_packetComponent (SId);
+           if (packetCompIndex != -1) 
+	      ServiceComps [i]. appType = appType;
+	}
+
+	return lOffset / 8;
+}
+
+//	FEC sub-channel organization 6.2.2
+	private void	FIG0Extension14 (byte [] p, int d) {
+int	Length	= getBits (p, d, 3, 5);	// in Bytes
+int	used	= 2;			// in Bytes
+int	i;
+
+	while (used < Length) {
+	   int	SubChId	= getBits (p, d, used * 8, 6);
+	   int	FEC_scheme	= getBits (p, d, used * 8 + 6, 2);
+	   used = used + 1;
+
+	   for (i = 0; i < 64; i ++) {
+              if (ServiceComps [i]. subChannelId == SubChId) {
+                 ServiceComps [i]. FEC_scheme = FEC_scheme;
+              }
+           }
+	}
 }
 
 	private	void	process_FIG1 (byte [] p, int d) {
@@ -692,7 +762,7 @@ StringBuilder buffer;
 	   return ServiceComps [serviceComp].subChannelId;
 	}
 
-	public	boolean is_audioChannel (String s) {
+	public	boolean is_audioService (String s) {
 	   int serviceIndex	= findServiceIndex (s);
 	   if (serviceIndex == -1)
 	      return false;
@@ -701,10 +771,22 @@ StringBuilder buffer;
 	   if (compIndex == -1)
 	      return false;
 
-	   return ServiceComps [compIndex]. tMID== 0;
+	   return ServiceComps [compIndex]. tMID == 0;
 	}
 
-	public	void	serviceData (String s, ProgramData p) {
+	public	boolean is_packetService (String s) {
+	   int serviceIndex	= findServiceIndex (s);
+	   if (serviceIndex == -1)
+	      return false;
+
+	   int compIndex	= findServiceComponent (s);
+	   if (compIndex == -1)
+	      return false;
+
+	   return ServiceComps [compIndex]. tMID == 3;
+	}
+
+	public	void	audioservice_Data (String s, AudioData p) {
 	   int serviceIndex	= findServiceIndex (s);
 	   if (serviceIndex == -1) {
 	      p. defined = false;
@@ -717,12 +799,18 @@ StringBuilder buffer;
 	      return;
 	   }
 
+	   if (ServiceComps [serviceComp]. tMID != 0) {
+	      p. defined = false;
+	      return;
+	   }
+
 	   int subChId		= findSubChannel (serviceComp);
 	   if (subChId == -1) {
 	      p. defined = false;
 	      return;
 	   }
-	   p. serviceName	= s;
+
+	   p. audioService	= true;
 	   p. serviceId		= listofServices [serviceIndex]. serviceId;
 	   p. subchId		= subChId;
 	   p. startAddr		= subChannels [subChId]. startAddr;
@@ -736,12 +824,52 @@ StringBuilder buffer;
 	   p. defined		= true;
 	}
 
+	public	void	packetservice_Data (String s, PacketData p) {
+	   int serviceIndex	= findServiceIndex (s);
+	   if (serviceIndex == -1) {
+	      p. defined = false;
+	      return;
+	   }
+
+	   int serviceComp	= findServiceComponent (s);
+	   if (serviceComp == -1) {
+	      p. defined = false;
+	      return;
+	   }
+
+	   if (ServiceComps [serviceComp]. tMID != 3) {
+	      p. defined = false;
+	      return;
+	   }
+
+	   int subChId		= findSubChannel (serviceComp);
+	   if (subChId == -1) {
+	      p. defined = false;
+	      return;
+	   }
+
+	   p. audioService	= false;
+	   p. serviceId		= listofServices [serviceIndex]. serviceId;
+	   p. subchId		= subChId;
+	   p. startAddr		= subChannels [subChId]. startAddr;
+	   p. shortForm		= subChannels [subChId]. shortForm;
+	   p. protLevel		= subChannels [subChId]. protLevel;
+	   p. length		= subChannels [subChId]. length;
+	   p. bitRate		= subChannels [subChId]. bitRate;
+	   p. FEC_scheme	= ServiceComps [serviceComp]. FEC_scheme;
+	   p. DSCTy		= ServiceComps [serviceComp]. DSCTy;
+           p. DGflag		= ServiceComps [serviceComp]. DGFlag;
+           p. packetAddress	= ServiceComps [serviceComp]. packetAddress;
+           p. componentNr	= ServiceComps [serviceComp]. componentnr;
+           p. appType		= ServiceComps [serviceComp]. appType;
+	   p. defined		= true;
+	}
+
 	protected
 	boolean	ensembleIdentified	= false;
 
 
 	private int find_packetComponent (int SCId) {
-
            for (int i = 0; i < 64; i ++) {
               if (!ServiceComps [i]. inUse)
                  continue;

@@ -96,7 +96,7 @@ public class RadioController implements modelSignals, viewSignals {
 	         handle_scannerTimeout ();
 	      }
 	   };
-	   timer. schedule (timerTask, 5 * 1000);
+	   timer. schedule (timerTask, 10 * 1000);
 	   int tunedFrequency	= my_bandHandler. Frequency (channelNumber);
 	   m_model. selectChannel (tunedFrequency, true);
 	   m_view.  showScanning  (my_bandHandler. channel (channelNumber));
@@ -132,7 +132,7 @@ public class RadioController implements modelSignals, viewSignals {
 	         handle_scannerTimeout ();
 	      }
 	   };
-	   timer. schedule (timerTask, 5 * 1000);
+	   timer. schedule (timerTask, 10 * 1000);
 	   int tunedFrequency	= my_bandHandler. Frequency (channelNumber);
 	   m_model. selectChannel (tunedFrequency, true);
 	   m_view.  showScanning  (my_bandHandler. channel (channelNumber));
@@ -144,6 +144,7 @@ public class RadioController implements modelSignals, viewSignals {
 	   if (!scanning)
 	      return;
 	   p. channel		= my_bandHandler. channel (channelNumber);
+	   p. serviceName	= s1;
 	   m_view. newService (s1);
 	   services. add (p);
 	   serviceCount ++;
@@ -198,23 +199,47 @@ public class RadioController implements modelSignals, viewSignals {
 	}
 
 	private	void	show_serviceData (int index) {
-	   String serviceName	= services. get (index). serviceName;
-	   String channel	= services. get (index). channel;
-	   int    startAddr	= services. get (index). startAddr;
-	   int	  length	= services. get (index). length;
-	   boolean	shortForm	= services. get (index). shortForm;
-	   int    bitRate	= services. get (index). bitRate;
-	   int	  protLevel	= services. get (index). protLevel;
-	   String programType	= textMapper. getProgramType (
+	   if (services. get (index) instanceof AudioData) {
+	      String serviceName	= services. get (index). serviceName;
+	      String channel	= services. get (index). channel;
+	      int    startAddr	= services. get (index). startAddr;
+	      int  length	= services. get (index). length;
+	      boolean	shortForm	= services. get (index). shortForm;
+	      int    bitRate	= services. get (index). bitRate;
+	      int	  protLevel	= services. get (index). protLevel;
+	      String programType	= textMapper. getProgramType (
 	                            services. get (index). programType);
-	   m_view. showProgramdata (serviceName,
-	                            channel,
-	                            startAddr,
-	                            length,
-	                            shortForm,
-	                            bitRate,
-	                            protLevel,
-	                            programType);
+	
+	      m_view. show_audioData (serviceName,
+	                              channel,
+	                              startAddr,
+	                              length,
+	                              shortForm,
+	                              bitRate,
+	                              protLevel,
+	                              programType);
+	   }
+	   else
+	   if (services. get (index) instanceof PacketData) {
+	      String serviceName	= services. get (index). serviceName;
+	      String channel		= services. get (index). channel;
+	      int    startAddr		= services. get (index). startAddr;
+	      int    length		= services. get (index). length;
+	      boolean	shortForm	= services. get (index). shortForm;
+	      int    bitRate		= services. get (index). bitRate;
+	      int    protLevel		= services. get (index). protLevel;
+	      int    FEC_scheme		= services. get (index). FEC_scheme;
+	      int    appType		= services. get (index). appType;
+	      m_view. show_packetData (serviceName,
+	                               channel,
+	                               startAddr,
+	                               length,
+	                               shortForm,
+	                               bitRate,
+	                               protLevel,
+	                               FEC_scheme,
+	                               appType);
+	   }
 	}
 //
 //	When starting a service, we first have to ensure that the
@@ -240,7 +265,7 @@ public class RadioController implements modelSignals, viewSignals {
 	      m_view. clear_dynamicLabel ();
 	      m_view. showService   ("tuning to channel " + channel);
 	      m_model. selectChannel (frequency, false);
-	      timer. schedule (selectorTask, 5 * 1000);
+	      timer. schedule (selectorTask, 10 * 1000);
 	   }
 	   m_view. showSelectedChannel (currentChannel);
 	}

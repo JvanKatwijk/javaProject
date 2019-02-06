@@ -92,14 +92,16 @@ mir_sdr_DeviceT devDesc [4];
 //	gain value upon an attenation value and set setexternal Gain
 void	sdrplayHandler::setGain		(int32_t g) {
 	theGain		= 20 + g * 39 / 100;
+	fprintf (stderr, "gain reduction set to %d\n", theGain);
 	mir_sdr_RSP_SetGr (theGain, 3, 1, 0);
 }
 
 void	sdrplayHandler::set_autogain	(bool agcMode) {
 	this	-> agcMode = agcMode;
+	fprintf (stderr, "autogain set %s\n", agcMode ? "on" : "off");
 	mir_sdr_AgcControl (agcMode ? mir_sdr_AGC_100HZ :
                                       mir_sdr_AGC_DISABLE,
-                            -30, 0, 0, 0, 0, 4);
+                            -30, 0, 0, 0, 0, 3);
 }
 
 static
@@ -154,7 +156,7 @@ int	localGRed	= theGain;
 	                              double (frequency) / MHz (1),
 	                              mir_sdr_BW_1_536,
 	                              mir_sdr_IF_Zero,
-	                              4,	// lnaEnable do not know yet
+	                              3,	// lnaEnable do not know yet
 	                              &gRdBSystem,
 	                              mir_sdr_USE_RSP_SET_GR,
 	                              &samplesPerPacket,

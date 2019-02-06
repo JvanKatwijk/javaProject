@@ -29,7 +29,6 @@ import	utils.*;
 	public class OfdmDecoder extends Thread {
 	   private final	DabParams	my_dabParams;
 	   private final	FFT_NEW		javaFFT;
-	   private final	fftHandler	nativeFFT;
 	   private final	ficHandler	my_ficHandler;
 	   private final	FreqInterleaver	my_Mapper;
 	   private final	RadioModel	theGUI;
@@ -48,7 +47,6 @@ import	utils.*;
 	                                 RadioModel	theGUI) {
 	      this. my_dabParams	= my_dabParams;
 	      javaFFT		= new FFT_NEW (my_dabParams. get_T_u ());
-	      nativeFFT		= new fftHandler (my_dabParams. get_dabMode ());
 	      my_ficHandler	= fc;
 	      this. theGUI	= theGUI;
 	      my_Mapper		= new FreqInterleaver	(my_dabParams);
@@ -65,7 +63,6 @@ import	utils.*;
 	   public	void	processBlock_0 (float [] buffer) {
 	      System. arraycopy (buffer, 0, phaseReference, 0, buffer. length);
 	      javaFFT. fft (phaseReference);
-//	      nativeFFT. do_FFT (phaseReference, 1);
 	      current_snr	= 0.6f * current_snr +
 	                                    0.4f * get_snr (phaseReference);
 	      if (++frameCount_1 > 10) {
@@ -88,7 +85,6 @@ import	utils.*;
   */
 	   public void	processBlock (float [] fft_buffer, int blkno) {
 	      javaFFT.  fft (fft_buffer);
-//	      nativeFFT.  do_FFT (fft_buffer, 1);
 
 //	The de-interleaving understands this
 	      for (int i = 0; i < carriers; i ++) {
