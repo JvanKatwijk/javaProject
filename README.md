@@ -17,17 +17,20 @@ a programming exercise and it is not actively maintained.
 Nevertheless, comments are welcome.
 
 ----------------------------------------------------------------------------
+WARNING
+----------------------------------------------------------------------------
+
+This software is not maintained and (sometimes) used to experiment with
+
+----------------------------------------------------------------------------
 Installation
 ----------------------------------------------------------------------------
 One needs to have installed 
 * a. jdk-8*  for running (compiling) the program
 * b. libfaad, the faad library as well as the include files;
-* c. portaudio, the library for handling the soundcard;
-* d. fftw3, the library for the fft operation.
 * e. libmirsdrapi-rsp, the library for the SDRplay, and/or librtlsdr, the
      library for the dabsticks, and/or libairspy, the library for the
      airspy.
-
 
 -----------------------------------------------------------------------------
 The use of native code
@@ -39,12 +42,6 @@ wrappers around the existing libraries mainly.
 * a. wrappers for the device handlers;
 * b. a wrapper around the faad library;
 * c. a small library for handling MP2 frames;
-* d. a wrapper around the fftw3f library (although a simple FFT class 
-     written in java is part of the sources as well);
-* e. a wrapper around a "spiral-based" convolutional decoder. (A simple
-     deconvolutional decoder written in Java is part of the sources as well).
-* f. a wrapper around the portaudio library.
-
 
 The C(++) code for the wrappers is in the different subdirectories in the
 directory "libraries".

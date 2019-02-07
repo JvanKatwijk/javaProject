@@ -34,8 +34,8 @@ public class	DabAudio extends DabVirtual {
         private final	int	fragmentSize;
 	private final	Protection protectionHandler;
 	private final	AudioProcessor audioProcessor;
-	private final	PCMwrapper	soundHandler;
-//	private final	SoundCard	soundHandler;
+//	private final	PCMwrapper	soundHandler;
+	private final	SoundCard	soundHandler;
 	      private	int countforInterleaver  = 0;
 	      private	int interleaverIndex     = 0;
 	private final	byte [] shiftRegister    = new byte [9];
@@ -79,8 +79,8 @@ public class	DabAudio extends DabVirtual {
 	      protectionHandler    = new EEP_protection (pd. bitRate,
 	                                                 pd. protLevel);
 //
-	   soundHandler		= new PCMwrapper ();
-//	   soundHandler		= new SoundCard ();
+//	   soundHandler		= new PCMwrapper ();
+	   soundHandler		= new SoundCard ();
 	   if (dabModus == DAB_PLUS)
 	      audioProcessor = new MP4_Processor (pd. bitRate,
 	                                          theScreen,

@@ -31,8 +31,7 @@ import	utils.*;
 	private final byte []	outVector;
 	private final byte []	rsIn;
 	private	final byte []	rsOut;
-	private final PCMwrapper	soundHandler;
-//	private final SoundCard	soundHandler;
+	private final SoundCard	soundHandler;
         
 	private final Padhandler my_padHandler;
 	private final firecodeChecker fc;
@@ -50,8 +49,7 @@ import	utils.*;
 
 	   public	MP4_Processor (int bitRate,
 	                               RadioModel theScreen,
-	                               PCMwrapper rb) {
-//	                               SoundCard rb) {
+	                               SoundCard rb) {
 	      this. bitRate	= bitRate;
               this. theGUI      = theScreen;
 	      soundHandler	= rb;

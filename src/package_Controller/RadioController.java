@@ -146,7 +146,15 @@ public class RadioController implements modelSignals, viewSignals {
 	   p. channel		= my_bandHandler. channel (channelNumber);
 	   p. serviceName	= s1;
 	   m_view. newService (s1);
-	   services. add (p);
+	   
+	   if (p instanceof PacketData) {
+	      PacketData pd = (PacketData)p;
+	      services. add (pd);
+	   }
+	   else {
+	      AudioData ad = (AudioData)p;
+	      services. add (ad);
+	   }
 	   serviceCount ++;
 	   m_view. showServiceCount (serviceCount);
 	}
@@ -200,15 +208,16 @@ public class RadioController implements modelSignals, viewSignals {
 
 	private	void	show_serviceData (int index) {
 	   if (services. get (index) instanceof AudioData) {
-	      String serviceName	= services. get (index). serviceName;
-	      String channel	= services. get (index). channel;
-	      int    startAddr	= services. get (index). startAddr;
-	      int  length	= services. get (index). length;
-	      boolean	shortForm	= services. get (index). shortForm;
-	      int    bitRate	= services. get (index). bitRate;
-	      int	  protLevel	= services. get (index). protLevel;
+	      AudioData ad = (AudioData)(services. get (index));
+	      String serviceName	= ad. serviceName;
+	      String channel	= ad. channel;
+	      int    startAddr	= ad. startAddr;
+	      int    length	= ad. length;
+	      boolean	shortForm	= ad. shortForm;
+	      int    bitRate	= ad. bitRate;
+	      int    protLevel	= ad. protLevel;
 	      String programType	= textMapper. getProgramType (
-	                            services. get (index). programType);
+	                            ad. programType);
 	
 	      m_view. show_audioData (serviceName,
 	                              channel,
@@ -221,15 +230,17 @@ public class RadioController implements modelSignals, viewSignals {
 	   }
 	   else
 	   if (services. get (index) instanceof PacketData) {
-	      String serviceName	= services. get (index). serviceName;
-	      String channel		= services. get (index). channel;
-	      int    startAddr		= services. get (index). startAddr;
-	      int    length		= services. get (index). length;
-	      boolean	shortForm	= services. get (index). shortForm;
-	      int    bitRate		= services. get (index). bitRate;
-	      int    protLevel		= services. get (index). protLevel;
-	      int    FEC_scheme		= services. get (index). FEC_scheme;
-	      int    appType		= services. get (index). appType;
+	      PacketData pd = (PacketData)(services. get (index));
+	      String serviceName	= pd. serviceName;
+	      String channel		= pd. channel;
+	      int    startAddr		= pd. startAddr;
+	      int    length		= pd. length;
+	      boolean	shortForm	= pd. shortForm;
+	      int    bitRate		= pd. bitRate;
+	      int    protLevel		= pd. protLevel;
+	      int    DSCTy		= pd. DSCTy;
+	      int    FEC_scheme		= pd. FEC_scheme;
+	      int    appType		= pd. appType;
 	      m_view. show_packetData (serviceName,
 	                               channel,
 	                               startAddr,
@@ -237,6 +248,7 @@ public class RadioController implements modelSignals, viewSignals {
 	                               shortForm,
 	                               bitRate,
 	                               protLevel,
+	                               DSCTy,
 	                               FEC_scheme,
 	                               appType);
 	   }

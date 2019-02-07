@@ -392,6 +392,7 @@ public class RadioView extends JFrame {
 	                                 boolean	shortForm,
 	                                 int		bitRate,
 	                                 int 		protLevel,
+	                                 int		DSCTy,
 	                                 int		FEC_scheme,
 	                                 int		appType) {
 	   notifier. setPreferredSize (new Dimension (200, 200));
@@ -415,6 +416,7 @@ public class RadioView extends JFrame {
 	      protL = "UEP " + protLevel;
 	   }
 	   JLabel Label_4      = new JLabel ("protection " + protL);
+	   JLabel Label_4a	= new JLabel ("DSCTy " + DSCTy);
 	   JLabel Label_5      = new JLabel ("FEC scheme " + FEC_scheme);
 	   JLabel Label_a      = new JLabel ("app type   " + appType);
 	   main. add (Label_0);
@@ -422,6 +424,7 @@ public class RadioView extends JFrame {
 	   main. add (Label_2);
 	   main. add (Label_3);
 	   main. add (Label_4);
+	   main. add (Label_4a);
 	   main. add (Label_5);
 	   main. add (Label_a);
 	   main. add (Label_6);

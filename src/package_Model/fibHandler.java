@@ -428,6 +428,7 @@ int serviceIndex;
                                                                   });
 	}
 
+	System. out. println ("compIndex = " + compIndex + " subChId " + SubChId + " DSCTy " + DSCTy);
         ServiceComps [compIndex]. is_madePublic = true;
         ServiceComps [compIndex]. subChannelId = SubChId;
         ServiceComps [compIndex]. DSCTy        = DSCTy;
@@ -469,7 +470,7 @@ int	i;
 	   int	length		= getBits (p, d, lOffset + 11, 5);
 	   lOffset 		+= (11 + 5 + 8 * length);
 
-	   int packetCompIndex	= find_packetComponent (SId);
+	   int packetCompIndex	= find_serviceComponent (SId, SCId);
            if (packetCompIndex != -1) 
 	      ServiceComps [i]. appType = appType;
 	}
@@ -863,6 +864,7 @@ StringBuilder buffer;
            p. componentNr	= ServiceComps [serviceComp]. componentnr;
            p. appType		= ServiceComps [serviceComp]. appType;
 	   p. defined		= true;
+	   System. out. println ("found FEC_scheme " + p. FEC_scheme + " DSCTy " + p. DSCTy);
 	}
 
 	protected
@@ -880,5 +882,22 @@ StringBuilder buffer;
            }
            return -1;
 	}
+
+	private int find_serviceComponent (int SId, int SCId) {
+	int i;
+
+        for (i = 0; i < 64; i ++) {
+           if (!ServiceComps [i]. inUse)
+              continue;
+
+           if ( (findServiceIndex (SId) == ServiceComps [i]. service)) {
+              if (ServiceComps [i]. SCId == SCId)
+                 return i;
+           }
+        }
+
+        return -1;
+}
+
 }
 

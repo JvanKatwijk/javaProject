@@ -28,12 +28,9 @@ public class AACDecoder {
 
 	private	final	LFfilter	f_32000_r;
 	private	final	LFfilter	f_32000_i;
-	private final	PCMwrapper	soundHandler;
-//	private final	SoundCard	soundHandler;
+	private final	SoundCard	soundHandler;
 
-	public AACDecoder (PCMwrapper b) {
-//	public AACDecoder (SoundCard b) {
-	
+	public AACDecoder (SoundCard b) {
 	   soundHandler	= b;
 	   info		= new int [10];
 	   localBuffer	= new short [1024];

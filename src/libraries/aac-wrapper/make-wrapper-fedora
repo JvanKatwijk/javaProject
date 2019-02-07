@@ -1,0 +1,3 @@
+#
+sudo g++ -shared -fPIC -I /usr/lib/jvm/java-1.8.0-openjdk/include -I /usr/lib/jvm/java-1.8.0-openjdk/include/linux -lstdc++ aac-wrapper.cpp -o libfaad-wrapper.so -lfaad
+

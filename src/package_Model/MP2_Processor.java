@@ -36,8 +36,7 @@ import utils.*;
 	private		int	baudRate;
 	private	final	int	bitRate;
 	private final	RadioModel	theGUI;
-	private	final	PCMwrapper soundHandler;
-//	private	final	SoundCard soundHandler;
+	private	final	SoundCard soundHandler;
 	private final   Padhandler my_padHandler;
 	private final	short [] sampleBuf;
 	private		boolean	mp2Loaded;
@@ -52,8 +51,7 @@ import utils.*;
 
 	   public	MP2_Processor  (int bitRate,
 	                                RadioModel theScreen,
-//	                                SoundCard soundHandler) {
-	                                PCMwrapper soundHandler) {
+	                                SoundCard soundHandler) {
 	     
               this. bitRate     = bitRate;
               theGUI            = theScreen;

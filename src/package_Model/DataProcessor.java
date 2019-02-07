@@ -29,12 +29,12 @@ package package_Model;
 	   private int	DGflag;
 	   private int	FEC_scheme;
 	   public	DataProcessor	(PacketData pd) {
-	      bitRate	= pd. bitRate;
-              DSCTy	= pd. DSCTy;
-              appType	= pd. appType;
-              packetAddress = pd. packetAddress;
-              DGflag	= pd. DGflag;
-              FEC_scheme = pd. FEC_scheme;
+	      bitRate		= pd. bitRate;
+              DSCTy		= pd. DSCTy;
+              appType		= pd. appType;
+              packetAddress	= pd. packetAddress;
+              DGflag		= pd. DGflag;
+              FEC_scheme	= pd. FEC_scheme;
 
 	      System. out. println (bitRate + " " + DSCTy + " " + appType + " " + packetAddress + " " + DGflag + " " + FEC_scheme);
 	   }

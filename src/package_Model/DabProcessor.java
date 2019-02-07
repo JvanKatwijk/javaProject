@@ -350,10 +350,7 @@ public class DabProcessor extends Thread {
 	   else
 	   if (my_ficHandler. is_packetService (s)) {
 	      PacketData ps = new PacketData ();
-	      System. out. println ("going to start " + s);
 	      my_ficHandler. packetservice_Data (s, ps);
-	      if (ps. defined)
-	         System. out. println ("service is defined");
 	      if (!ps. defined)
 	         return;
 	      

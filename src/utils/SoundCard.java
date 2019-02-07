@@ -40,7 +40,7 @@ public class SoundCard extends Thread {
 	   }
 
 	   try {
-	      dataline. open (format, 512);
+	      dataline. open (format, 2048);
 	      dataline .start();
 	   } catch (Exception e) {
 	      System. out. println (e.getMessage());
