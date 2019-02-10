@@ -134,8 +134,9 @@ public class DabProcessor extends Thread {
 	            if (counter > t_F) {
 	               if (scanning) {
 	                  attempts ++;
-	                  if (attempts > 5) {
+	                  if (attempts > 8) {
 	                     attempts = 0;
+	                     System. out. println ("hier gaan we fout");
 	                     try {
 	                        javax. swing. SwingUtilities.
 	                                 invokeLater (new Runnable () {
@@ -196,6 +197,7 @@ public class DabProcessor extends Thread {
 	           correctionNeeded	= true;
 	           continue;
 	         }
+	         attempts	= 0;
 	         if (!inSync) {
                     setSync (true);
                     inSync  = true;
@@ -293,7 +295,6 @@ public class DabProcessor extends Thread {
 //	and go on for the next cycle by skipping Tnull samples
 	         my_Reader. getSamples (Tnull_Buffer,
 	                                fineCorrector + coarseCorrector);
-	
 	      }
 	   } catch (Exception e) {
 //	      System. out. println (e. getMessage ());

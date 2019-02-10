@@ -100,7 +100,7 @@ public	class DabBackend extends Thread {
 	public void	processBlock (float [] fft_buffer, int blkno) {
 	   try {
 	      while (!freeSlots.
-                          tryAcquire (1, 50, TimeUnit.MILLISECONDS)) {
+                          tryAcquire (1, 10, TimeUnit.MILLISECONDS)) {
 	         if (!running)
 	            return;
 	      }
@@ -121,7 +121,7 @@ public	class DabBackend extends Thread {
 	   try {
 	      while (running) {
 	         while (!usedSlots.
-	                  tryAcquire (1, 50, TimeUnit.MILLISECONDS)) {
+	                  tryAcquire (1, 10, TimeUnit.MILLISECONDS)) {
 	            if (!running)
 	               return;
 	         }

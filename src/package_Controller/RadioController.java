@@ -47,7 +47,7 @@ public class RadioController implements modelSignals, viewSignals {
 	   timer		= new Timer ();
 	}
 //
-	public	void	startRadio () {
+	public	void	startRadio (boolean fileInput) {
 	   m_model.	addServiceListener (this);
 	   m_view. 	addServiceListener (this);
 	   String gv;
@@ -132,7 +132,7 @@ public class RadioController implements modelSignals, viewSignals {
 	         handle_scannerTimeout ();
 	      }
 	   };
-	   timer. schedule (timerTask, 10 * 1000);
+	   timer. schedule (timerTask, 5 * 1000);
 	   int tunedFrequency	= my_bandHandler. Frequency (channelNumber);
 	   m_model. selectChannel (tunedFrequency, true);
 	   m_view.  showScanning  (my_bandHandler. channel (channelNumber));

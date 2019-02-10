@@ -23,7 +23,7 @@
 
 #include <math.h>
 
-#include "utils_MP2_Processor.h"
+#include "package_Model_MP2_Processor.h"
 #include "kjmp2.h"
 
 #include	<stdio.h>
@@ -529,7 +529,7 @@ unsigned long kjmp2_decodeFrame(
     return frame_size;
 }
 
-JNIEXPORT jboolean JNICALL Java_utils_MP2_1Processor_mp2decodeFrame
+JNIEXPORT jboolean JNICALL Java_package_1Model_MP2_1Processor_mp2decodeFrame
   (JNIEnv *env, jobject obj,
 	 jlong handler, jbyteArray indata, jshortArray outdata) {
 
@@ -544,7 +544,7 @@ int r	= kjmp2_decodeFrame (mp2, (const unsigned char *)inBody, outBody);
 
 kjmp2_context_t *mp2 = NULL;
 
-JNIEXPORT jlong JNICALL Java_utils_MP2_1Processor_init_1mp2lib
+JNIEXPORT jlong JNICALL Java_package_1Model_MP2_1Processor_init_1mp2lib
    (JNIEnv *env , jobject obj) {
 	if (mp2 == NULL)
 	   mp2 = new kjmp2_context_t;

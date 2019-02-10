@@ -49,7 +49,6 @@ public class RadioModel {
 	                                    this);
 //	restart the dabprocessor
 	   dabProcessor. start ();
-	   
 	   my_device. restartReader (frequency * 1000);
 	   channel_active	= true;
 	}

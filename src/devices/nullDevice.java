@@ -40,4 +40,5 @@ public class nullDevice implements Device {
 	public	void	autoGain	(boolean b) {}
 	@Override
 	public	boolean	is_nullDevice	()	{ return true; }
+	public	boolean	is_fileInput	()	{ return false; }
 }

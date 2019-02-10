@@ -59,6 +59,9 @@ public class sdrplayDevice implements Device {
 	@Override
 	public	boolean	is_nullDevice	() { return false; }
 
+	@Override
+	public	boolean	is_fileInput	() { return false; }
+
 	public	sdrplayDevice (int frequency,
 	                       int gain, boolean autogain) throws Exception {
 	   System. out. println ("going to load sdrplay library");
