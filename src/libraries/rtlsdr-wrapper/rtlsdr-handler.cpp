@@ -130,19 +130,11 @@ int16_t	i;
 	open = false;
 }
 
-void	rtlsdrHandler::setVFOFrequency	(int32_t f) {
-	frequency	= f;
-	(void)(rtlsdr_set_center_freq (device, f));
-}
-
-int32_t	rtlsdrHandler::getVFOFrequency	(void) {
-	return (int32_t)(rtlsdr_get_center_freq (device));
-}
 //
-//
-bool	rtlsdrHandler::restartReader	(void) {
+bool	rtlsdrHandler::restartReader	(int freq) {
 int32_t	r;
 
+	fprintf (stderr, "restartReader called\n");
 	if (running)
 	   return true;
 	_I_Buffer	-> FlushRingBuffer ();
@@ -151,6 +143,8 @@ int32_t	r;
            return false;
 
 	workerHandle = std::thread (controlThread, this);
+	(void)(rtlsdr_set_center_freq (device, freq));
+	rtlsdr_set_tuner_gain (device, gains [int (theGain * gainsCount / 100)]);
 	running	= true;
 	return true;
 }
@@ -203,15 +197,13 @@ static float convTable [] = {
 //	The brave old getSamples. For the dab stick, we get
 //	size samples: still in I/Q pairs, but we have to convert the data from
 //	uint8_t to DSPCOMPLEX *
-int32_t	rtlsdrHandler::getSamples (std::complex<float> *V, int32_t size) { 
+int32_t	rtlsdrHandler::getSamples (float *V, int32_t size) { 
 int32_t	amount, i;
 uint8_t	*tempBuffer = (uint8_t *)alloca (2 * size * sizeof (uint8_t));
 //
 	amount = _I_Buffer	-> getDataFromBuffer (tempBuffer, 2 * size);
-	for (i = 0; i < amount / 2; i ++)
-	    V [i] = std::complex<float>
-	                    (convTable [tempBuffer [2 * i]],
-	                     convTable [tempBuffer [2 * i + 1]]);
+	for (i = 0; i < amount; i ++)
+	    V [i] = convTable [tempBuffer [i],
 	return amount / 2;
 }
 

@@ -134,9 +134,8 @@ public class DabProcessor extends Thread {
 	            if (counter > t_F) {
 	               if (scanning) {
 	                  attempts ++;
-	                  if (attempts > 8) {
+	                  if (attempts > 5) {
 	                     attempts = 0;
-	                     System. out. println ("hier gaan we fout");
 	                     try {
 	                        javax. swing. SwingUtilities.
 	                                 invokeLater (new Runnable () {
@@ -252,10 +251,10 @@ public class DabProcessor extends Thread {
 	                                   coarseCorrector + fineCorrector);
 	   
 	            for (int i = 0; i < t_g; i ++) {
-	              Float re_ofdm = ofdmBuffer [2 * (t_u - t_g + i)];
-	              Float im_ofdm = ofdmBuffer [2 * (t_u - t_g + i) + 1];
+	              Float re_ofdm =   ofdmBuffer [2 * (t_u - t_g + i)];
+	              Float im_ofdm = - ofdmBuffer [2 * (t_u - t_g + i) + 1];
 	              Float re_tg   =   tg_Buffer [2 * i];
-	              Float im_tg   = - tg_Buffer [2 * i + 1];
+	              Float im_tg   =   tg_Buffer [2 * i + 1];
 	              freqCorr_re  += re_ofdm * re_tg - im_ofdm * im_tg;
 	              freqCorr_im  += re_ofdm * im_tg + im_ofdm * re_tg;
 	            }
@@ -273,10 +272,10 @@ public class DabProcessor extends Thread {
 	                                   coarseCorrector + fineCorrector);
 	   
 	            for (int i = 0; i < t_g; i ++) {
-	              Float re_ofdm = ofdmBuffer [2 * (t_u - t_g + i)];
-	              Float im_ofdm = ofdmBuffer [2 * (t_u - t_g + i) + 1];
+	              Float re_ofdm =   ofdmBuffer [2 * (t_u - t_g + i)];
+	              Float im_ofdm = - ofdmBuffer [2 * (t_u - t_g + i) + 1];
 	              Float re_tg   =   tg_Buffer [2 * i];
-	              Float im_tg   = - tg_Buffer [2 * i + 1];
+	              Float im_tg   =   tg_Buffer [2 * i + 1];
 	              freqCorr_re  += re_ofdm * re_tg - im_ofdm * im_tg;
 	              freqCorr_im  += re_ofdm * im_tg + im_ofdm * re_tg;
 	            }

@@ -45,7 +45,7 @@ JNIEXPORT void JNICALL Java_devices_rtlsdrDevice_rtlsdr_1resetBuffer
  * Signature: (J)V
  */
 JNIEXPORT void JNICALL Java_devices_rtlsdrDevice_rtlsdr_1restartReader
-  (JNIEnv *, jobject, jlong);
+  (JNIEnv *, jobject, jlong, jint);
 
 /*
  * Class:     devices_rtlsdrDevice

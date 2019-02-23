@@ -35,8 +35,8 @@ import java.util.Arrays;
 	private final	boolean []	indexTable;
 
 	private	final	ViterbiHandler	myViterbi;
-        
-        
+	
+	
 	public	EEP_protection (int rate, int level) {
 	final	int	L1;
 	final	int	L2;
@@ -50,11 +50,11 @@ import java.util.Arrays;
 	   outSize	= 24 * bitRate;
 	   viterbiBlock	= new int [outSize * 4 + 24];
 	   indexTable	= new boolean [outSize * 4 + 24];
-           Arrays. fill (indexTable, false);	
+	   Arrays. fill (indexTable, false);	
 	   myViterbi	= new ViterbiHandler (outSize, false);
 	   if ((protLevel & (1 << 2)) == 0) {	// set A profiles
 	      switch (protLevel & 03) {
-              default:
+	      default:
 	         case 0:			// actually level 1
 	            L1			= 6 * bitRate / 8 - 3;
 	            L2			= 3;
@@ -113,7 +113,7 @@ import java.util.Arrays;
 	            tableIndex_1	= 6;
 	            tableIndex_2	= 5;
 	            break;
-                 
+	         
 	         default:
 	         case 0:					// actually level 1
 	            L1			= 24 * bitRate / 32 - 3;
@@ -155,7 +155,7 @@ import java.util.Arrays;
 
 	@Override
 	public	boolean deconvolve (int [] inVec, int size, byte [] outVec) {
-           int inputCounter  = 0;
+	   int inputCounter  = 0;
 	   Arrays. fill (viterbiBlock, 0);
 	   for (int i = 0; i < viterbiBlock. length; i ++)
 	      if (indexTable [i])

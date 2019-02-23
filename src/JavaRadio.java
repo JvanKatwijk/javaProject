@@ -103,10 +103,10 @@ public class JavaRadio {
 	      } catch (Exception e) {}
 	   }
 
-//	   try {
-//	      tester = new rtlsdrDevice (220000000, 90, true);
-//	      return tester;
-//	   } catch (Exception e) {}
+	   try {
+	      tester = new rtlsdrDevice (220000000, 90, true);
+	      return tester;
+	   } catch (Exception e) {}
 	   return new nullDevice ();
 	}
 }

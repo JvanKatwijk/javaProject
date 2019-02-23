@@ -118,7 +118,7 @@ public class	DabAudio extends DabVirtual {
 	@Override
 	public void   process	(int [] v, int index, int c) {
 	   try {
-              while (!(freeSlots.tryAcquire (1, 50,
+              while (!(freeSlots.tryAcquire (1, 10,
 	                                          TimeUnit. MILLISECONDS))) {
 	         if (!running) {
 	            return;
@@ -140,7 +140,7 @@ public class	DabAudio extends DabVirtual {
 	   try {
 	      while (running) {
 	         while (!usedSlots.
-	                   tryAcquire (1, 50, TimeUnit.MILLISECONDS)) {
+	                   tryAcquire (1, 10, TimeUnit.MILLISECONDS)) {
 	            if (!running)
                        return;
                  }
@@ -164,7 +164,7 @@ public class	DabAudio extends DabVirtual {
 	   freeSlots. release ();
 
 //      only continue when de-interleaver is filled
-           if (countforInterleaver <= 15) {
+           if (countforInterleaver < 15) {
               countforInterleaver ++;
               return;
            }

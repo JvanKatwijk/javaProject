@@ -365,9 +365,9 @@ unsigned long kjmp2_decodeFrame(
     }
 
     // set up the bitstream reader
-    bit_window = frame[2] << 16;
+    bit_window = frame [2] << 16;
     bits_in_window = 8;
-    frame_pos = &frame[3];
+    frame_pos = &frame [3];
 
     // read the rest of the header
     bit_rate_index_minus1 = get_bits(4) - 1;

@@ -38,12 +38,10 @@ public:
 	                                 bool		autogain,
 	                                 uint16_t	deviceIndex = 0);
 			~rtlsdrHandler	(void);
-	void		setVFOFrequency	(int32_t);
-	int32_t		getVFOFrequency	(void);
 //	interface to the reader
-	bool		restartReader	(void);
+	bool		restartReader	(int32_t freq);
 	void		stopReader	(void);
-	int32_t		getSamples	(std::complex<float> *, int32_t);
+	int32_t		getSamples	(float *, int32_t);
 	int32_t		Samples		(void);
 	void		resetBuffer	(void);
 	int16_t		maxGain		(void);

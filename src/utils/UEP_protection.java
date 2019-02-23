@@ -45,8 +45,8 @@ import java.util.Arrays;
 	private	final	int PI_3	= 8;
 	private	final	int PI_4	= 9;
 
-        private final   int     outSize;
-        private final   int []  viterbiBlock;
+	private final   int     outSize;
+	private final   int []  viterbiBlock;
 	private final   boolean [] punctureTable;
 	
 	private final	int [][] PROFILE_TABLE  = {
@@ -125,13 +125,13 @@ import java.util.Arrays;
 	private final   ViterbiHandler  myViterbi;
 
 	private int findIndex (int bitRate, int protLevel) {
-           for (int i = 0; PROFILE_TABLE [i][BITRATE] != 0; i ++)
-              if ((PROFILE_TABLE [i] [BITRATE] == bitRate) &&
-                  (PROFILE_TABLE [i][PROTLEVEL] == protLevel))
-                 return i;
+	   for (int i = 0; PROFILE_TABLE [i][BITRATE] != 0; i ++)
+	      if ((PROFILE_TABLE [i] [BITRATE] == bitRate) &&
+	          (PROFILE_TABLE [i][PROTLEVEL] == protLevel))
+	         return i;
 
-           return -1;
-        }
+	   return -1;
+	}
 
 	public	UEP_protection (int bitRate, int protLevel) {
 	final	int	length_1;
@@ -145,17 +145,17 @@ import java.util.Arrays;
 	final	int	index_4;
 
 	int viterbiCounter  = 0;
-        
+	
 	   outSize		= 24 * bitRate;
 	   myViterbi		= new ViterbiHandler (outSize, false);
-	   int index = findIndex (bitRate, protLevel);
+	   int index		= findIndex (bitRate, protLevel);
 	   if (index == -1) {   // should not happen
 	      System. out. println ("problem with bitrate " + bitRate + "and priotectionlevel " + protLevel + " call an expert");
-	   index = 1;
+	      index = 1;
 	   }
 	   viterbiBlock		= new int [outSize * 4 + 24];
-	   punctureTable		= new boolean [outSize * 4 + 24];
-           Arrays. fill (punctureTable, false);
+	   punctureTable	= new boolean [outSize * 4 + 24];
+	   Arrays. fill (punctureTable, false);
 	   length_1		= PROFILE_TABLE [index] [L1];
 	   length_2		= PROFILE_TABLE [index] [L2];
 	   length_3		= PROFILE_TABLE [index] [L3];
@@ -219,7 +219,7 @@ import java.util.Arrays;
 
 	@Override
 	public boolean deconvolve (int [] inVec, int size, byte [] outVec) {
-           int inputCounter = 0;
+	   int inputCounter = 0;
 //     clear the bits in the viterbiBlock,
 //     only the non-punctured ones are set
 	   Arrays. fill (viterbiBlock, 0);
@@ -230,6 +230,6 @@ import java.util.Arrays;
 
 //     The actual deconvolution is done by the viterbi decoder
 	   myViterbi. deconvolve (viterbiBlock, outVec);
-           return true; // always true
+	   return true; // always true
 	}
 }
